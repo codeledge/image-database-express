@@ -17,13 +17,18 @@ block content
   //h3 File Upload Form
   .row
     .col-md-6
-      p All files will be uploaded to "/uploads" directory.
+      p All files will be uploaded to "/uploads" directory and entered.
       form(role='form', enctype='multipart/form-data', method='POST')
         input(type='hidden', name='_csrf', value=_csrf)
         .form-group
+          label.col-form-label.font-weight-bold Name
+          .col-md-6
+            input(type='text', name='name')
           label.col-form-label.font-weight-bold Wikidata ID
           .col-md-6
-            input(type='text', name='wikidataEntity')
+            input(type='text', name='wikidataEntity', class='wikidata-searchbox')
+            input(type='hidden', name='wikidataEntity_id' id='wikidataEntity_id')
+
           label.col-form-label.font-weight-bold File Input
           .col-md-6
             input(type='file', name='myFile')

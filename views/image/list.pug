@@ -1,0 +1,19 @@
+extends ../layout
+
+block content
+    .page-header
+        h3 All Images
+
+    table(style='width:100%')
+        tr
+            //th Id
+            th Name
+            th Wikidata
+            th Created
+
+        for image in images
+            tr
+                //td=image.id
+                td=image.name
+                td=image.wikidataEntity
+                td=image.createdAt

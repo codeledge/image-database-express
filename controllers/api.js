@@ -689,16 +689,16 @@ exports.getLob = async (req, res, next) => {
  * File Upload API example.
  */
 
-exports.getFileUpload = (req, res) => {
-  res.render('api/upload', {
-    title: 'File Upload'
-  });
-};
-
-exports.postFileUpload = (req, res) => {
-  req.flash('success', { msg: 'File was uploaded successfully.' });
-  res.redirect('/api/upload');
-};
+// exports.getFileUpload = (req, res) => {
+//   res.render('api/upload', {
+//     title: 'File Upload'
+//   });
+// };
+//
+// exports.postFileUpload = (req, res) => {
+//   req.flash('success', { msg: 'File was uploaded successfully.' });
+//   res.redirect('/api/upload');
+// };
 
 /**
  * GET /api/pinterest

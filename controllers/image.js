@@ -2,10 +2,10 @@
  * GET /books
  * List all books.
  */
-const ImageModel = require('../models/Images.js');
+const ImageModel = require('../models/Image');
 
 exports.getImages = (req, res) => {
   ImageModel.find((err, docs) => {
-    res.render('images', { images: docs });
+    res.render('image/list', { images: docs });
   });
 };

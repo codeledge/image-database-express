@@ -42,6 +42,8 @@
     "googleapis": "^52.1.0",
     "instagram-node": "^0.5.8",
     "jquery": "^3.5.1",
+    "jquery-ui": "^1.12.1",
+    "jquery-ui-dist": "^1.12.1",
     "lastfm": "^0.9.3",
     "lob": "^6.1.0",
     "lodash": "^4.17.19",
@@ -75,7 +77,9 @@
     "tumblr.js": "^2.0.2",
     "twilio": "^3.48.0",
     "twit": "^2.2.11",
-    "validator": "^13.1.1"
+    "validator": "^13.1.1",
+    "wikibase-sdk": "^7.7.0",
+    "wikidata-sdk": "^7.7.0"
   },
   "devDependencies": {
     "chai": "^4.2.0",

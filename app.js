@@ -31,10 +31,11 @@ dotenv.config({ path: '.env.example' });
  */
 const homeController = require('./controllers/home');
 const userController = require('./controllers/user');
-// const apiController = require('./controllers/api');
+const apiController = require('./controllers/api');
 const contactController = require('./controllers/contact');
 const uploadController = require('./controllers/upload');
 const imageController = require('./controllers/image');
+const adminController = require('./controllers/admin');
 
 /**
  * API keys and Passport configuration.
@@ -123,6 +124,7 @@ app.use('/js/lib', express.static(path.join(__dirname, 'node_modules/chart.js/di
 app.use('/js/lib', express.static(path.join(__dirname, 'node_modules/popper.js/dist/umd'), { maxAge: 31557600000 }));
 app.use('/js/lib', express.static(path.join(__dirname, 'node_modules/bootstrap/dist/js'), { maxAge: 31557600000 }));
 app.use('/js/lib', express.static(path.join(__dirname, 'node_modules/jquery/dist'), { maxAge: 31557600000 }));
+app.use('/js/lib', express.static(path.join(__dirname, 'node_modules/jquery-ui-dist'), { maxAge: 31557600000 }));
 app.use('/webfonts', express.static(path.join(__dirname, 'node_modules/@fortawesome/fontawesome-free/webfonts'), { maxAge: 31557600000 }));
 
 /**
@@ -148,10 +150,16 @@ app.post('/account/password', passportConfig.isAuthenticated, userController.pos
 app.post('/account/delete', passportConfig.isAuthenticated, userController.postDeleteAccount);
 app.get('/account/unlink/:provider', passportConfig.isAuthenticated, userController.getOauthUnlink);
 
+
+/*
+ * Admin routes
+ */
+app.get('/admin/users', adminController.getUsers);
+
 /**
  * API examples routes.
  */
-// app.get('/api', apiController.getApi);
+app.get('/api', apiController.getApi);
 // app.get('/api/lastfm', apiController.getLastfm);
 // app.get('/api/nyt', apiController.getNewYorkTimes);
 // app.get('/api/steam', passportConfig.isAuthenticated, passportConfig.isAuthorized, apiController.getSteam);
@@ -185,11 +193,13 @@ app.post('/api/upload', upload.single('myFile'), lusca({ csrf: true }), uploadCo
 // app.get('/api/google/sheets', passportConfig.isAuthenticated, passportConfig.isAuthorized, apiController.getGoogleSheets);
 // app.get('/api/quickbooks', passportConfig.isAuthenticated, passportConfig.isAuthorized, apiController.getQuickbooks);
 
-app.route('/images')
-  .get(imageController.getBooks)
-  .post(imageController.createBooks)
-  .put(imageController.updateBooks)
-  .delete(imageController.deleteBooks);
+app.get('/admin/images', imageController.getImages);
+
+// app.route('/images')
+//   .get(imageController.getBooks)
+//   .post(imageController.createBooks)
+//   .put(imageController.updateBooks)
+//   .delete(imageController.deleteBooks);
 
 /**
  * OAuth authentication routes. (Sign in)
