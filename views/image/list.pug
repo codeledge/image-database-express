@@ -11,6 +11,7 @@ block content
             th Wikidata Id
             th Wikidata Label
             th Type
+            th Source
             th Created
 
         for image in images
@@ -24,4 +25,9 @@ block content
                 td=image.wikidataEntity
                 td=image.wikidataLabel
                 td=image.mimetype
-                td=image.createdAt
+                td
+                    if image.sourceUrl
+                        a(href=image.sourceUrl) Source
+                    else
+                        span
+                td=moment(image.createdAt).format('DD.MM.YYYY HH:mm')
