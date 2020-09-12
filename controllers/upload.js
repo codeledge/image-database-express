@@ -11,24 +11,36 @@ const Image = require('../models/Image');
 
 exports.getFileUpload = (req, res) => {
   res.render('api/upload', {
-    title: 'File Upload'
+    title: 'File Upload',
+    // query: req.query
   });
 };
 
-exports.postFileUpload = (req, res, next) => {
+exports.postFileUpload = async (req, res, next) => {
+  console.log(req.body);
   const wikidataId = req.body.wikidataEntityId;
-  if (!isEntityId(wikidataId)) {
-    req.flash('errors', { msg: 'The Entity ID is invalid.' });
+  if (!req.file) {
+    req.flash('errors', { msg: 'No File is given.' });
     res.redirect('/api/upload');
   }
-  const wikidataInfo = getItem(wikidataId);
+  if (!isEntityId(wikidataId)) {
+    req.flash('errors', { msg: 'The Entity ID ' + wikidataId + ' is invalid.' });
+    res.redirect('/api/upload');
+  }
+  const wikidataInfo = await getItem([wikidataId], 'en');
+  const label = wdk.simplify.labels(wikidataInfo[wikidataId].labels).en;
+  // const claims = wdk.simplify.claims(wikidataInfo[wikidataId].claim);
+
   console.log(wikidataInfo);
+  // console.log(labels);
   const image = new Image({
-    name: 'TestNAme',
+    name: req.body.name,
     wikidataEntity: getNumericId(wikidataId),
-    wikidataLabel: '',
-    internalFileName: req.file,
-    originalFilename: req.body.wikidataEntity,
+    wikidataLabel: label,
+    // wikidataType: label,
+    mimetype: req.file.mimetype,
+    internalFileName: req.file.filename,
+    originalFilename: req.file.originalname,
     viewCount: 0
   });
   console.log('sdf');

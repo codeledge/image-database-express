@@ -6,6 +6,7 @@ const imageSchema = new mongoose.Schema({
   wikidataLabel: String,
   internalFileName: String,
   originalFilename: String,
+  mimetype: String,
   fileSize: Number,
   viewCount: Number,
   createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
