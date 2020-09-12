@@ -1,6 +1,5 @@
 /* eslint-env jquery, browser */
 $(document).ready(() => {
-
   // Place JavaScript code here...
 
   $('.wikidata-searchbox').autocomplete({
@@ -8,33 +7,33 @@ $(document).ready(() => {
     source: (request, response) => {
       console.log(request.term);
       $.ajax({
-        /* https://www.wikidata.org/w/api.php?action=wbsearchentities&search=W&format=json&errorformat=plaintext&language=en&uselang=en&type=item*/
-        url: "https://www.wikidata.org/w/api.php",
-        dataType: "jsonp",
+        /* https://www.wikidata.org/w/api.php?action=wbsearchentities&search=W&format=json&errorformat=plaintext&language=en&uselang=en&type=item */
+        url: 'https://www.wikidata.org/w/api.php',
+        dataType: 'jsonp',
         data: {
-          'action': "wbsearchentities",
-          'format': "json",
-          'errorformat' : "plaintext",
-          'language' : "en",
-          'uselang' : "en",
-          'type' : "item",
-          'search': request.term
+          action: 'wbsearchentities',
+          format: 'json',
+          errorformat: 'plaintext',
+          language: 'en',
+          uselang: 'en',
+          type: 'item',
+          search: request.term
         },
-        success: function(data) {
+        success(data) {
           // console.log(data);
           data = data.search;
           response(data);
         }
       });
     },
-    select: function( event, ui ) {
-      $( ".wikidata-searchbox" ).val( ui.item.label );
-      $( "#wikidataEntity_id" ).val( ui.item.id );
+    select(event, ui) {
+      $('.wikidata-searchbox').val(ui.item.label);
+      $('#wikidataEntity_id').val(ui.item.id);
       return false;
     }
-  }).autocomplete( "instance" )._renderItem = function( ul, item ) {
-    return $( "<li>" )
-      .append( "<div><b>" + item.label + "</b><br>" + item.description + "</div>" )
-      .appendTo( ul );
-  }
+  }).autocomplete('instance')._renderItem = function (ul, item) {
+    return $('<li>')
+      .append(`<div><b>${item.label}</b><br>${item.description}</div>`)
+      .appendTo(ul);
+  };
 });
