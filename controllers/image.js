@@ -39,7 +39,7 @@ exports.showImageByWikidata = async (req, res) => {
     res.json({ error: 'mimetype', entry: image });
   }
   res.setHeader('content-type', image[0].mimetype);
-  res.sendFile('/home/martin/workspace/images-world/uploads/thumbnails/' + image[0].internalFileName);//, { root: __dirname });
+  res.sendFile(path.resolve('uploads/thumbnails/' + image[0].internalFileName));
   // res.json({ req: image });
   // console.log(image[0].internalFileName);
 };
