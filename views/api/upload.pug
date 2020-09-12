@@ -26,10 +26,11 @@ block content
             input(type='text', name='name')
           label.col-form-label.font-weight-bold Wikidata ID
           .col-md-6
-            input(type='text', name='wikidataEntity', class='wikidata-searchbox')
-            input(type='hidden', name='wikidataEntity_id' id='wikidataEntity_id')
+            input(type='text', name='wikidataEntity', class='wikidata-searchbox', required)
+          .col-md-6
+            input(type='hidden', name='wikidataEntityId' id='wikidataEntity_id')
 
           label.col-form-label.font-weight-bold File Input
           .col-md-6
-            input(type='file', name='myFile')
+            input(type='file', name='myFile', accept='image/*', required)
         button.btn.btn-primary(type='submit') Submit
