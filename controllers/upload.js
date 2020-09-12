@@ -173,6 +173,7 @@ exports.postFileUpload = async (req, res, next) => {
     name: req.body.name,
     wikidataEntity: getNumericId(wikidataId),
     wikidataLabel: label,
+    sourceUrl : req.body.sourceUrl,
     // wikidataType: label,
     viewCount: 0
   };
