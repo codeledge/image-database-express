@@ -208,7 +208,7 @@ app.post('/api/upload', upload.single('myFile'), lusca({ csrf: true }), uploadCo
 app.get('/admin/images/deleteAll', imageController.deleteAll);
 app.get('/admin/images', imageController.getImages);
 
-app.get('/api/getImage/:id', imageController.showImageByWikidata);
+app.get('/api/getImage/:id(\\d+)', imageController.showImageByWikidata);
 
 // app.route('/images')
 //   .get(imageController.getBooks)
