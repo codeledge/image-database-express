@@ -20,4 +20,4 @@ module.exports = async function getItem(id, languageCode) {
   return entities;
   // const formattedEntity = await formatEntity(entities[id], languageCode);
   // return formattedEntity;
-}
+};
