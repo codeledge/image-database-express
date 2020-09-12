@@ -139,6 +139,8 @@ app.use('/js/lib', express.static(path.join(__dirname, 'node_modules/jquery/dist
 app.use('/js/lib', express.static(path.join(__dirname, 'node_modules/jquery-ui-dist'), { maxAge: 31557600000 }));
 app.use('/webfonts', express.static(path.join(__dirname, 'node_modules/@fortawesome/fontawesome-free/webfonts'), { maxAge: 31557600000 }));
 
+
+app.locals.moment = require('moment');
 /**
  * Primary app routes.
  */
