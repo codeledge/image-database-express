@@ -6,6 +6,7 @@ const wdk = require('wikidata-sdk');
 const fs = require('fs');
 const request = require('request');
 const crypto = require('crypto');
+const sharp = require('sharp');
 
 const {
   simplify, parse, isEntityId, isPropertyId, getNumericId
@@ -92,6 +93,16 @@ exports.postFileUpload = async (req, res, next) => {
       res.redirect('/api/upload');
     }
   });
+
+  sharp('uploads/' + imageDetails.internalFileName).resize(200).toFile('uploads/thumbnails/' + imageDetails.internalFileName, (err, resizeImage) => {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log(resizeImage);
+    }
+  });
+
+
   const wikidataLink = wdk.getSitelinkUrl({ site: 'wikidata', title: wikidataId });
   req.flash('success', { msg: `File was uploaded successfully <a href="${wikidataLink}">link</a> and entered into the DBs.` });
   res.redirect('/api/upload');

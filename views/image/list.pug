@@ -6,16 +6,20 @@ block content
 
     table(style='width:100%')
         tr
-            //th Id
+            th Image
             th Name
+            th Wikidata Id
             th Wikidata Label
-            th Wikidata
             th Type
             th Created
 
         for image in images
             tr
-                //td=image.id
+                td
+                    if image.wikidataEntity
+                        img(src='/api/getImage/' + image.wikidataEntity, style='max-height:30px' )
+                    else
+                        span Image
                 td=image.name
                 td=image.wikidataEntity
                 td=image.wikidataLabel
