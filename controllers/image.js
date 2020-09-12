@@ -27,7 +27,7 @@ exports.showImageByWikidata = async (req, res) => {
   if (!image.length) {
     res.json({ error: 404 });
   }
-  res.setHeader('content-type', 'image/jpeg');
+  res.setHeader('content-type', image.mimetype);
   res.sendFile('/home/martin/workspace/images-world/uploads/' + image[0].internalFileName);//, { root: __dirname });
   // res.json({ req: image });
   // console.log(image[0].internalFileName);

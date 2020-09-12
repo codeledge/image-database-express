@@ -7,6 +7,8 @@ const imageSchema = new mongoose.Schema({
   internalFileName: String,
   originalFilename: String,
   mimetype: String,
+  license: String,
+  sourceUrl: String,
   fileSize: Number,
   viewCount: Number,
   createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },

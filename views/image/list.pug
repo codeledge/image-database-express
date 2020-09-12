@@ -10,6 +10,7 @@ block content
             th Name
             th Wikidata Label
             th Wikidata
+            th Type
             th Created
 
         for image in images
@@ -18,4 +19,5 @@ block content
                 td=image.name
                 td=image.wikidataEntity
                 td=image.wikidataLabel
+                td=image.mimetype
                 td=image.createdAt
