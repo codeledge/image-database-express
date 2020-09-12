@@ -1,6 +1,6 @@
 @import "themes/default/variables";
 
-//@import "node_modules/bootstrap/scss/bootstrap";
+@import "node_modules/bootstrap/scss/bootstrap";
 //@import "node_modules/jquery-ui/themes/base/core";
 //@import "node_modules/jquery-ui/themes/base/autocomplete";
 @import "node_modules/jquery-ui-dist/jquery-ui";
@@ -187,17 +187,17 @@ $enable-gradients: true;
     background-color: #503484;
   }
 }
-
-.wikidata-searchbox {
-  position: absolute;
-  top: 0;
-  left: 0;
-  cursor: default;
-  background-color:#fff;
-  border: 1px solid #aaaaaa;
-  max-height: 200px;
-
-  overflow-y: auto;   /* prevent horizontal scrollbar */
-  overflow-x: hidden; /* add padding to account for vertical scrollbar */
-  z-index:1000 !important;
-}
+//
+//.wikidata-searchbox {
+//  position: absolute;
+//  top: 0;
+//  left: 0;
+//  cursor: default;
+//  background-color:#fff;
+//  border: 1px solid #aaaaaa;
+//  max-height: 200px;
+//
+//  overflow-y: auto;   /* prevent horizontal scrollbar */
+//  overflow-x: hidden; /* add padding to account for vertical scrollbar */
+//  z-index:1000 !important;
+//}
