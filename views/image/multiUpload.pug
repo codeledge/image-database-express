@@ -1,0 +1,29 @@
+extends ../layout
+
+block content
+    .pb-2.mt-2.mb-4.border-bottom
+        h2
+            i.fas.fa-upload.fa-sm
+            | Multiple entity image upload
+
+    //h3 File Upload Form
+    .row
+        .col-md-6
+            p All files will be uploaded
+            form(action='/image/multi_upload' role='form', method='POST')
+                input(type='hidden', name='_csrf', value=_csrf)
+                .form-group
+                    for entry in entities
+                        label.col-form-label.font-weight-bold
+                            a(href=entry.link)=entry.label
+                        .col-md-12
+                            //input(type='hidden', name='wikidataEntityId' id='wikidataEntity_id', value=entry.id)
+                            if entry.images
+                                span Image already present on Wikidata
+                            else if entry.existing.length > 0
+                                span Image already present in Database
+                            else
+                                input(type='text', name='sourceUrl['+entry.id+']')
+                                span(style='margin-left:20px')
+                                    a(target='_blank' href='https://www.google.com/search?tbm=isch&as_q='+entry.label) google
+                button.btn.btn-primary(type='submit') Submit

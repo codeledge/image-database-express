@@ -26,6 +26,108 @@ const download = (url, path, callback) => {
   });
 };
 
+function createThumbnail(filename){
+  sharp('uploads/' + filename).resize(200).toFile('uploads/thumbnails/' + filename, (err, resizeImage) => {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log(resizeImage);
+    }
+  });
+}
+
+exports.getMultiFileUpload = async (req, res) => {
+  // res.send(req.params);
+
+  if (!req.query.ids) {
+    req.flash('errors', { msg: 'Parameter ids is missing' });
+    res.redirect('/api/upload');
+  }
+  const ids = req.query.ids.split(",");
+  console.log(ids);
+  // for(let id in ids){
+  //   if (!isEntityId(id)) {
+  //     req.flash('errors', { msg: 'Some ids are invalid.' });
+  //     res.redirect('/api/upload');
+  //   }
+  // }
+
+  //
+  const wikidataEntities = await getItem(ids, 'en');
+  let entities = [];
+  // console.log(wikidataEntities);
+  // for(var id, enty in wikidataEntities){
+  for(var i in wikidataEntities) {
+    console.log("Start"+i);
+    var label = wdk.simplify.labels(wikidataEntities[i].labels).en;
+    var claims = wdk.simplify.claims(wikidataEntities[i].claims);
+    var existing = await Image.find({ wikidataEntity: getNumericId(i) }, null, { sort: { name: 1 }, limit: 1 });
+    // console.log(claims);
+    entities.push({
+      id: i,
+      link: wdk.getSitelinkUrl({ site: 'wikidata', title: i }),
+      images: claims.P18,
+      existing: existing,
+      label: label,
+    });
+  }
+  console.log(entities);
+  // const label = wdk.simplify.labels(wikidataInfo[wikidataId].labels).en;
+  res.render('image/multiUpload', {
+    title: 'File Upload',
+    entities: entities
+    // query: req.query
+  });
+};
+
+exports.handleMultiUrlUpload = async (req, res, next) => {
+  const urls = req.body.sourceUrl;
+  if(urls === undefined){
+    req.flash('errors', {msg: 'Nothing.'});
+    res.redirect(req.header('Referer') || '/');
+  }
+  const wikidataInfo = await getItem(Object.keys(urls), 'en');
+  let uploadedCount = 0;
+  for(let wikidataId in urls) {
+    try {
+      var file = getRandomFilename();
+      var sourceUrl = urls[wikidataId];
+      if(sourceUrl) {
+        download(sourceUrl, "uploads/" + file, () => {
+          // res.savedUrl = file;
+          let imageDetails = {
+            wikidataEntity: getNumericId(wikidataId),
+            wikidataLabel: wdk.simplify.labels(wikidataInfo[wikidataId].labels).en,
+            sourceUrl: sourceUrl,
+            internalFileName: file,
+            // originalFilename: sourceUrl
+            viewCount: 0
+          };
+          imageDetails.mimetype = 'image/jpeg';
+          var image = new Image(imageDetails);
+          image.save((err) => {
+            if (err) {
+              console.log(err);
+              req.flash('errors', {msg: 'Entry couldn\'t be saved'});
+              res.redirect(req.header('Referer') || '/');
+            }
+          });
+          createThumbnail(imageDetails.internalFileName);
+          uploadedCount++;
+        });
+        // next();
+      }
+
+    } catch (err) {
+      req.flash('errors', {msg: 'URL invalid.'});
+      res.redirect(req.header('Referer') || '/');
+    }
+  }
+  req.flash('success', { msg: `${uploadedCount} files uploaded.` });
+  res.redirect(req.header('Referer') || '/');
+
+};
+
 exports.getFileUpload = (req, res) => {
   res.render('api/upload', {
     title: 'File Upload',
@@ -94,14 +196,7 @@ exports.postFileUpload = async (req, res, next) => {
     }
   });
 
-  sharp('uploads/' + imageDetails.internalFileName).resize(200).toFile('uploads/thumbnails/' + imageDetails.internalFileName, (err, resizeImage) => {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log(resizeImage);
-    }
-  });
-
+  createThumbnail(imageDetails.internalFileName);
 
   const wikidataLink = wdk.getSitelinkUrl({ site: 'wikidata', title: wikidataId });
   req.flash('success', { msg: `File was uploaded successfully <a href="${wikidataLink}">link</a> and entered into the DBs.` });

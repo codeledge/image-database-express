@@ -196,6 +196,11 @@ app.get('/api', apiController.getApi);
 // app.get('/api/lob', apiController.getLob);
 app.get('/api/upload', lusca({ csrf: true }), uploadController.getFileUpload);
 app.post('/api/upload', upload.single('myFile'), lusca({ csrf: true }), uploadController.handleSourceUrl, uploadController.postFileUpload);
+
+
+app.get('/image/multi_upload', lusca({ csrf: true }), uploadController.getMultiFileUpload);
+app.post('/image/multi_upload', lusca({ csrf: true }), uploadController.handleMultiUrlUpload);
+
 // app.get('/api/pinterest', passportConfig.isAuthenticated, passportConfig.isAuthorized, apiController.getPinterest);
 // app.post('/api/pinterest', passportConfig.isAuthenticated, passportConfig.isAuthorized, apiController.postPinterest);
 // app.get('/api/here-maps', apiController.getHereMaps);
