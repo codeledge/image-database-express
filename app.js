@@ -193,7 +193,10 @@ app.post('/api/upload', upload.single('myFile'), lusca({ csrf: true }), uploadCo
 // app.get('/api/google/sheets', passportConfig.isAuthenticated, passportConfig.isAuthorized, apiController.getGoogleSheets);
 // app.get('/api/quickbooks', passportConfig.isAuthenticated, passportConfig.isAuthorized, apiController.getQuickbooks);
 
+app.get('/admin/images/deleteAll', imageController.deleteAll);
 app.get('/admin/images', imageController.getImages);
+
+app.get('/api/getImage/:id', imageController.showImageByWikidata);
 
 // app.route('/images')
 //   .get(imageController.getBooks)
