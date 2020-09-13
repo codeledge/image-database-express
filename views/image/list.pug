@@ -7,7 +7,7 @@ block content
     table(style='width:100%')
         tr
             th Image
-            th Name
+            th Count
             th Wikidata Id
             th Wikidata Label
             th Type
@@ -21,7 +21,7 @@ block content
                         img(src='/api/getImageById/' + image.id, style='max-height:30px' )
                     else
                         span Image
-                td=image.name
+                td=image.viewCount
                 td=image.wikidataEntity
                 td=image.wikidataLabel
                 td=image.mimetype
@@ -31,3 +31,8 @@ block content
                     else
                         span
                 td=moment(image.createdAt).format('DD.MM.YYYY HH:mm')
+                if user && user.role === 'admin'
+                    td
+                        form(method='POST', action=`/admin/image/${image.id}/delete`)
+                            input(type='hidden', name='_csrf', value=_csrf)
+                            input.button.button--delete(type='submit' value='X' onclick='return confirm("Are you sure you want to delete this entry? (Cannot be undone)")')

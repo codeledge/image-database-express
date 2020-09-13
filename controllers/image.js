@@ -12,11 +12,45 @@ exports.getImages = (req, res) => {
   });
 };
 
+exports.deleteImage = (req, res) => {
+  const id = req.params.id;
+  ImageModel.remove(
+    { id: id },
+    (err) => {
+      if(err){
+        req.flash('errors', { msg: 'Entry couldn\'t be deleted.' });
+      }else{
+        req.flash('success', { msg: 'Entry has been deleted.' });
+        fs.unlinkSync('uploads/' + id);
+        fs.unlinkSync('uploads/thumbnails/' + id);
+      }
+      res.redirect('/admin/images');
+    }
+  );
+};
+
+/*
+Clears the database,
+TODO disable
+ */
 exports.deleteAll = (req, res) => {
   // if (req.body.deleteAll) {
 
     ImageModel.deleteMany({}, () => {
       req.flash('success', { msg: 'All entries deleted.' });
+
+      // const directory = 'uploads';
+      //
+      // fs.readdir(directory, (err, files) => {
+      //   if (err) throw err;
+      //
+      //   for (const file of files) {
+      //     fs.unlink(path.join(directory, file), err => {
+      //       if (err) throw err;
+      //     });
+      //   }
+      // });
+
       res.redirect('/admin/images');
     });
   // }
@@ -35,6 +69,9 @@ exports.showImageByWikidata = async (req, res) => {
   if ( !image[0].mimetype) {
     res.json({ error: 'mimetype', entry: image });
   }
+
+  await ImageModel.updateOne( {_id:image[0]._id} , {viewCount:(image[0].viewCount+1)} );
+
   res.setHeader('content-type', image[0].mimetype);
   res.sendFile(path.resolve('uploads/thumbnails/' + image[0].id));
   // res.json({ req: image });

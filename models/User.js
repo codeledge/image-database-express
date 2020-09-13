@@ -28,7 +28,10 @@ const userSchema = new mongoose.Schema({
     location: String,
     website: String,
     picture: String
-  }
+  },
+
+  role: { type: String, enum: ['admin', 'user'] },
+
 }, { timestamps: true });
 
 /**
