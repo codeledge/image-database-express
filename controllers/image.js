@@ -23,8 +23,6 @@ exports.deleteAll = (req, res) => {
 };
 
 exports.showImageByWikidata = async (req, res) => {
-  // console.log(req);
-  // res.json({req:req.params.id});
   const { id } = req.params;
   // if (!Number.isInteger(id)) { //already checked at app.js
   //   res.json({ error: 'Only numbers allowed' });
@@ -35,11 +33,15 @@ exports.showImageByWikidata = async (req, res) => {
     // res.json({ error: 404 });
   }
   if ( !image[0].mimetype) {
-    // res.sendStatus(404);
     res.json({ error: 'mimetype', entry: image });
   }
   res.setHeader('content-type', image[0].mimetype);
-  res.sendFile(path.resolve('uploads/thumbnails/' + image[0].internalFileName));
+  res.sendFile(path.resolve('uploads/thumbnails/' + image[0].id));
   // res.json({ req: image });
   // console.log(image[0].internalFileName);
+};
+exports.showImageById  = async (req, res) => {
+  const { id } = req.params;
+  res.setHeader('content-type', "image/jpeg");
+  res.sendFile(path.resolve('uploads/thumbnails/' + id));
 };

@@ -18,7 +18,7 @@ block content
             tr
                 td
                     if image.wikidataEntity
-                        img(src='/api/getImage/' + image.wikidataEntity, style='max-height:30px' )
+                        img(src='/api/getImageById/' + image.id, style='max-height:30px' )
                     else
                         span Image
                 td=image.name
