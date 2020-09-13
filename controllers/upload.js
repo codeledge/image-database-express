@@ -12,21 +12,26 @@ const {
   simplify, parse, isEntityId, isPropertyId, getNumericId
 } = require('wikibase-sdk');
 const getItem = require('./wikidata/getItem');
+const getRelatives = require('./wikidata/getRelatives');
+
 const Image = require('../models/Image');
 
 function getRandomFilename() {
   return crypto.randomBytes(20).toString('hex');
 }
 
-const download = (url, path, callback) => {
-  request.head(url, (err, res, body) => {
-    request(url)
-      .pipe(fs.createWriteStream(path))
-      .on('close', callback);
-  });
+const download = async (url, path) => {
+  await new Promise(resolve =>
+    request.head(url, (err, res, body) => {
+      request(url)
+        .pipe(fs.createWriteStream(path))
+        .on('close', resolve);
+    })
+  );
 };
 
 function createThumbnail(filename){
+  console.log('Create thumb: uploads/' + filename);
   sharp('uploads/' + filename).resize(200).toFile('uploads/thumbnails/' + filename, (err, resizeImage) => {
     if (err) {
       console.log(err);
@@ -40,11 +45,13 @@ exports.getMultiFileUpload = async (req, res) => {
   // res.send(req.params);
 
   if (!req.query.ids) {
-    req.flash('errors', { msg: 'Parameter ids is missing' });
-    res.redirect('/api/upload');
+    // req.flash('errors', { msg: 'Parameter ids is missing' });
+    // res.redirect('/api/upload');
+    res.render('image/multiUploadForm', {
+      title: 'File Upload',
+    });
   }
   const ids = req.query.ids.split(",");
-  console.log(ids);
   // for(let id in ids){
   //   if (!isEntityId(id)) {
   //     req.flash('errors', { msg: 'Some ids are invalid.' });
@@ -55,14 +62,11 @@ exports.getMultiFileUpload = async (req, res) => {
   //
   const wikidataEntities = await getItem(ids, 'en');
   let entities = [];
-  // console.log(wikidataEntities);
   // for(var id, enty in wikidataEntities){
   for(var i in wikidataEntities) {
-    console.log("Start"+i);
     var label = wdk.simplify.labels(wikidataEntities[i].labels).en;
     var claims = wdk.simplify.claims(wikidataEntities[i].claims);
     var existing = await Image.find({ wikidataEntity: getNumericId(i) }, null, { sort: { name: 1 }, limit: 1 });
-    // console.log(claims);
     entities.push({
       id: i,
       link: wdk.getSitelinkUrl({ site: 'wikidata', title: i }),
@@ -71,7 +75,6 @@ exports.getMultiFileUpload = async (req, res) => {
       label: label,
     });
   }
-  console.log(entities);
   // const label = wdk.simplify.labels(wikidataInfo[wikidataId].labels).en;
   res.render('image/multiUpload', {
     title: 'File Upload',
@@ -80,7 +83,24 @@ exports.getMultiFileUpload = async (req, res) => {
   });
 };
 
+
+exports.handlePersonSelect = async (req, res, next) => {
+
+  //A person is selected, forward
+  if(req.body.wikidataEntityId !== undefined){
+    const response = await getRelatives(req.body.wikidataEntityId);
+    const result = wdk.simplify.sparqlResults(response.data, { minimize: false });
+    const ids = result.map(entry => {
+      return entry.item.value;
+    });
+    res.redirect('/image/multi_upload?ids='+ids.slice(0,50).join(","));
+  }
+  next();
+
+};
+
 exports.handleMultiUrlUpload = async (req, res, next) => {
+
   const urls = req.body.sourceUrl;
   if(urls === undefined){
     req.flash('errors', {msg: 'Nothing.'});
@@ -92,8 +112,10 @@ exports.handleMultiUrlUpload = async (req, res, next) => {
     try {
       var file = getRandomFilename();
       var sourceUrl = urls[wikidataId];
+      console.log("RAndom: "+file);
       if(sourceUrl) {
-        download(sourceUrl, "uploads/" + file, () => {
+        await download(sourceUrl, "uploads/" + file);
+        // , () => {
           // res.savedUrl = file;
           let imageDetails = {
             wikidataEntity: getNumericId(wikidataId),
@@ -112,9 +134,9 @@ exports.handleMultiUrlUpload = async (req, res, next) => {
               res.redirect(req.header('Referer') || '/');
             }
           });
-          createThumbnail(imageDetails.internalFileName);
+          createThumbnail(file);
           uploadedCount++;
-        });
+        // });
         // next();
       }
 
@@ -140,10 +162,9 @@ exports.handleSourceUrl = async (req, res, next) => {
     if (req.body.sourceUrl) {
       try {
         const file = getRandomFilename();
-        download(req.body.sourceUrl, "uploads/" + file, () => {
-          res.savedUrl = file;
-          next();
-        });
+        await download(req.body.sourceUrl, "uploads/" + file);
+        res.savedUrl = file;
+        next();
       } catch (err){
         req.flash('errors', { msg: 'URL invalid.' });
         res.redirect('/api/upload');
@@ -158,7 +179,6 @@ exports.handleSourceUrl = async (req, res, next) => {
 };
 
 exports.postFileUpload = async (req, res, next) => {
-  console.log(req.body);
   const wikidataId = req.body.wikidataEntityId;
   if (!isEntityId(wikidataId)) {
     req.flash('errors', { msg: 'The Entity ID ' + wikidataId + ' is invalid.' });
@@ -187,7 +207,6 @@ exports.postFileUpload = async (req, res, next) => {
   }
 
   const image = new Image(imageDetails);
-  console.log('sdf');
   image.save((err) => {
     if (err) {
       console.log(err);

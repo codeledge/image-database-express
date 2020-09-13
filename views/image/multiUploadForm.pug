@@ -1,0 +1,22 @@
+extends ../layout
+
+block content
+    .pb-2.mt-2.mb-4.border-bottom
+        h2
+            i.fas.fa-upload.fa-sm
+            | Multiple entity image upload
+
+    //h3 File Upload Form
+    .row
+        .col-md-6
+            p Select a person
+            form(role='form', method='POST')
+                input(type='hidden', name='_csrf', value=_csrf)
+                .form-group
+                    label.col-form-label.font-weight-bold Person
+                    .col-md-6
+                        input(type='text', name='wikidataEntity', class='wikidata-searchbox', required)
+                    .col-md-6
+                        input(type='hidden', name='wikidataEntityId' id='wikidataEntity_id')
+                button.btn.btn-primary(type='submit') Submit
+

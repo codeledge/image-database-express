@@ -10,7 +10,7 @@ block content
     .row
         .col-md-6
             p All files will be uploaded
-            form(action='/image/multi_upload' role='form', method='POST')
+            form(role='form', method='POST')
                 input(type='hidden', name='_csrf', value=_csrf)
                 .form-group
                     for entry in entities

@@ -201,7 +201,7 @@ app.post('/api/upload', upload.single('myFile'), lusca({ csrf: true }), uploadCo
 
 
 app.get('/image/multi_upload', lusca({ csrf: true }), uploadController.getMultiFileUpload);
-app.post('/image/multi_upload', lusca({ csrf: true }), uploadController.handleMultiUrlUpload);
+app.post('/image/multi_upload', lusca({ csrf: true }), uploadController.handlePersonSelect, uploadController.handleMultiUrlUpload);
 
 // app.get('/api/pinterest', passportConfig.isAuthenticated, passportConfig.isAuthorized, apiController.getPinterest);
 // app.post('/api/pinterest', passportConfig.isAuthenticated, passportConfig.isAuthorized, apiController.postPinterest);
