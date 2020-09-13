@@ -3,7 +3,12 @@ extends layout
 block content
   h1 Image DB
   p.lead A Wikidata extension
-  //hr
+  hr
+
+  h3 Request an image
+  div
+    a(href='/api/getImage/4115189') /api/getImage/4115189
+    span Get an image (return 404 on error)
   //.row
   //  .col-md-6
   //    h2 Heading
