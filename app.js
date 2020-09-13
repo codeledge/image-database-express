@@ -215,6 +215,8 @@ app.post('/image/multi_upload', lusca({ csrf: true }), uploadController.handlePe
 app.get('/admin/images/deleteAll', imageController.deleteAll);
 app.get('/admin/images', imageController.getImages);
 
+
+app.get('/api/getImageById/:id(\\d+)',imageController.showImageById)
 app.get('/api/getImage/:id(\\d+)', imageController.showImageByWikidata);
 
 // app.route('/images')
