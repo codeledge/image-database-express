@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const AutoIncrement = require('mongoose-sequence')(mongoose);
 
 //loosely based on https://schema.org/ImageObject
 const imageSchema = new mongoose.Schema({
@@ -18,6 +19,8 @@ const imageSchema = new mongoose.Schema({
   viewCount: Number,
   createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
 }, { timestamps: true });
+
+imageSchema.plugin(AutoIncrement, {inc_field: 'id'});
 
 const Image = mongoose.model('Image', imageSchema);
 module.exports = Image;

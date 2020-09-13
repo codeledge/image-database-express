@@ -55,6 +55,8 @@
     "mailchecker": "^3.3.9",
     "moment": "^2.27.0",
     "mongoose": "^5.9.22",
+    "mongoose-datatable": "^2.2.2",
+    "mongoose-sequence": "^5.2.2",
     "morgan": "^1.10.0",
     "multer": "^1.4.2",
     "node-quickbooks": "^2.0.34",

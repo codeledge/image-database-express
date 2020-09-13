@@ -114,7 +114,6 @@ exports.handleMultiUrlUpload = async (req, res, next) => {
       var sourceUrl = urls[wikidataId];
       console.log("RAndom: "+file);
       if(sourceUrl) {
-        await download(sourceUrl, "uploads/" + file);
         // , () => {
           // res.savedUrl = file;
           let imageDetails = {
@@ -127,14 +126,10 @@ exports.handleMultiUrlUpload = async (req, res, next) => {
           };
           imageDetails.mimetype = 'image/jpeg';
           var image = new Image(imageDetails);
-          image.save((err) => {
-            if (err) {
-              console.log(err);
-              req.flash('errors', {msg: 'Entry couldn\'t be saved'});
-              res.redirect(req.header('Referer') || '/');
-            }
-          });
-          createThumbnail(file);
+          var savedImage = await image.save();
+          var savedImageId = savedImage.id;
+          await download(sourceUrl, "uploads/" + savedImageId);
+          createThumbnail(savedImageId);
           uploadedCount++;
         // });
         // next();
@@ -207,16 +202,22 @@ exports.postFileUpload = async (req, res, next) => {
   }
 
   const image = new Image(imageDetails);
-  image.save((err) => {
-    if (err) {
-      console.log(err);
-      // return next(err);
-      req.flash('errors', { msg: 'Entry couldn\'t be saved' });
-      res.redirect('/api/upload');
-    }
+  // image.save((err) => {
+  //   if (err) {
+  //     console.log(err);
+  //     // return next(err);
+  //     req.flash('errors', { msg: 'Entry couldn\'t be saved' });
+  //     res.redirect('/api/upload');
+  //   }
+  // });
+  var savedImage = await image.save();
+
+  fs.rename('uploads/' + imageDetails.internalFileName, 'uploads/' +savedImage.id, function (err) {
+    if (err) throw err;
+    console.log('Successfully renamed - AKA moved!')
   });
 
-  createThumbnail(imageDetails.internalFileName);
+  createThumbnail(savedImage.id);
 
   const wikidataLink = wdk.getSitelinkUrl({ site: 'wikidata', title: wikidataId });
   req.flash('success', { msg: `File was uploaded successfully <a href="${wikidataLink}">link</a> and entered into the DBs.` });
