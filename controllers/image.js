@@ -82,3 +82,10 @@ exports.showImageById  = async (req, res) => {
   res.setHeader('content-type', "image/jpeg");
   res.sendFile(path.resolve('uploads/thumbnails/' + id));
 };
+
+
+exports.imageInfo = async (req, res) => {
+  const { id } = req.params;
+  const image = await ImageModel.find({ wikidataEntity: id }, null, { sort: { name: 1 }, limit: 1 });
+  res.json({images:image});
+};

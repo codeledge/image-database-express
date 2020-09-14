@@ -218,6 +218,7 @@ app.post('/admin/image/:id/delete',imageController.deleteImage)
 
 app.get('/api/getImageById/:id(\\d+)',imageController.showImageById)
 app.get('/api/getImage/:id(\\d+)', imageController.showImageByWikidata);
+app.get('/api/image/info/:id(\\d+)', imageController.imageInfo);
 
 // app.route('/images')
 //   .get(imageController.getBooks)
