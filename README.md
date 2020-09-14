@@ -16,3 +16,20 @@ nodemon app.js`
 ```
 #Database
 .env.example has mongodb credentionals
+
+
+#Usage
+Basically there are two ways to upload new photos.
+
+A basic form: where you can upload a file, and optionally provide a source.
+If no upload file is given, the source Url will be copied to the uploads.
+
+Multi upload: 1) search for a person 2) the script will redirect to a page with all their relatives. This form only accepts ULRs. Empty fields will be ignored. Depending on the amount of urls, this form might take a bit longer to process.
+
+Image list: A list of all images, Users with role=admin can delete images, deletion will consist of removing the DB entry and remove the photo and its thumbnails.
+
+Currently anyone can upload photos.
+
+
+#Author
+M. Schibel
