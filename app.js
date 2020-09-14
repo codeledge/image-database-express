@@ -214,9 +214,9 @@ app.post('/image/multi_upload', lusca({ csrf: true }), uploadController.handlePe
 
 app.get('/admin/images/deleteAll', imageController.deleteAll);
 app.get('/admin/images', imageController.getImages);
-app.post('/admin/image/:id/delete',imageController.deleteImage)
+app.post('/admin/image/:id/delete',imageController.deleteImage);
 
-app.get('/api/getImageById/:id(\\d+)',imageController.showImageById)
+app.get('/api/getImageById/:id(\\d+)',imageController.showImageById);
 app.get('/api/getImage/:id(\\d+)', imageController.showImageByWikidata);
 app.get('/api/image/info/:id(\\d+)', imageController.imageInfo);
 
@@ -293,7 +293,7 @@ if (process.env.NODE_ENV === 'development') {
   // only use in development
   app.use(errorHandler());
 } else {
-  app.use((err, req, res, next) => {
+  app.use((err, req, res) => {
     console.error(err);
     res.status(500).send('Server Error');
   });
