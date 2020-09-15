@@ -7,8 +7,15 @@ block content
 
   h3 Request an image
   div
-    a(href='/api/getImage/4115189') /api/getImage/4115189
-    span Get an image (return 404 on error)
+    span Please use a valid Wikidata item id, without the Q. The returned image will be thumbnail with dimensions 200 x 200 pixels.
+    ul
+      li
+        a(href='/api/image/info/4115189') /api/image/info/$ID
+        small(style='margin-left:10px') Get Json info about a file
+      li
+        a(href='/api/getImage/4115189') /api/getImage/$ID
+        small(style='margin-left:10px') Get an image (return 404 on error)
+
   //.row
   //  .col-md-6
   //    h2 Heading
