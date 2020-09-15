@@ -18,6 +18,7 @@ const imageSchema = new mongoose.Schema({
   recordedDate: Date,
   viewCount: Number,
   createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  uploadSite: String,
 }, { timestamps: true });
 
 imageSchema.plugin(AutoIncrement, {inc_field: 'id'});
