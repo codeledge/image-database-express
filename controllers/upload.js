@@ -37,7 +37,7 @@ function applySmartCrop(src, dest, width, height) {
       const crop = result.topCrop;
       return sharp(src)
         .extract({ width: crop.width, height: crop.height, left: crop.x, top: crop.y })
-        // .resize(width, height)
+        .resize(200)
         .toFile(dest);
     })
 }
@@ -45,16 +45,16 @@ function applySmartCrop(src, dest, width, height) {
 
 
 function createThumbnail(filename){
-  applySmartCrop('uploads/' + filename, 'uploads/cropped/' + filename, 200, 200);
+  applySmartCrop('uploads/' + filename, 'uploads/thumbnails/' + filename, 200, 200);
 
-  console.log('Create thumb: uploads/' + filename);
-  sharp('uploads/cropped/' + filename).resize(200).toFile('uploads/thumbnails/' + filename, (err, resizeImage) => {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log(resizeImage);
-    }
-  });
+  // console.log('Create thumb: uploads/' + filename);
+  // sharp('uploads/cropped/' + filename).resize(200).toFile('uploads/thumbnails/' + filename, (err, resizeImage) => {
+  //   if (err) {
+  //     console.log(err);
+  //   } else {
+  //     console.log(resizeImage);
+  //   }
+  // });
 }
 
 exports.getMultiFileUpload = async (req, res) => {
@@ -128,7 +128,6 @@ exports.handleMultiUrlUpload = async (req, res, next) => {
     try {
       var file = getRandomFilename();
       var sourceUrl = urls[wikidataId];
-      console.log("RAndom: "+file);
       if(sourceUrl) {
         // , () => {
           // res.savedUrl = file;
@@ -137,6 +136,7 @@ exports.handleMultiUrlUpload = async (req, res, next) => {
             wikidataLabel: wdk.simplify.labels(wikidataInfo[wikidataId].labels).en,
             sourceUrl: sourceUrl,
             internalFileName: file,
+            uploadSite: req.hostname,
             // originalFilename: sourceUrl
             viewCount: 0
           };
@@ -205,6 +205,7 @@ exports.postFileUpload = async (req, res, next) => {
     wikidataEntity: getNumericId(wikidataId),
     wikidataLabel: label,
     sourceUrl : req.body.sourceUrl,
+    uploadSite: req.hostname,
     // wikidataType: label,
     viewCount: 0
   };
@@ -218,14 +219,7 @@ exports.postFileUpload = async (req, res, next) => {
   }
 
   const image = new Image(imageDetails);
-  // image.save((err) => {
-  //   if (err) {
-  //     console.log(err);
-  //     // return next(err);
-  //     req.flash('errors', { msg: 'Entry couldn\'t be saved' });
-  //     res.redirect('/api/upload');
-  //   }
-  // });
+
   var savedImage = await image.save();
 
   fs.rename('uploads/' + imageDetails.internalFileName, 'uploads/' +savedImage.id, function (err) {
@@ -236,6 +230,6 @@ exports.postFileUpload = async (req, res, next) => {
   createThumbnail(savedImage.id);
 
   const wikidataLink = wdk.getSitelinkUrl({ site: 'wikidata', title: wikidataId });
-  req.flash('success', { msg: `File was uploaded successfully <a href="${wikidataLink}">link</a> and entered into the DBs.` });
+  req.flash('success', { msg: `File was uploaded successfully. Photo of ${label} was saved and entered into the Database.` });
   res.redirect('/api/upload');
 };
