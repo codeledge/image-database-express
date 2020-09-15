@@ -81,6 +81,7 @@
     "pug": "^3.0.0",
     "request": "^2.88.2",
     "sharp": "^0.26.0",
+    "smartcrop-sharp": "^2.0.3",
     "stripe": "^8.69.0",
     "tumblr.js": "^2.0.2",
     "twilio": "^3.48.0",

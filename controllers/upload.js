@@ -7,6 +7,7 @@ const fs = require('fs');
 const request = require('request');
 const crypto = require('crypto');
 const sharp = require('sharp');
+const smartcrop = require('smartcrop-sharp');
 
 const {
   simplify, parse, isEntityId, isPropertyId, getNumericId
@@ -30,9 +31,24 @@ const download = async (url, path) => {
   );
 };
 
+function applySmartCrop(src, dest, width, height) {
+  return smartcrop.crop(src)
+    .then(function(result) {
+      const crop = result.topCrop;
+      return sharp(src)
+        .extract({ width: crop.width, height: crop.height, left: crop.x, top: crop.y })
+        // .resize(width, height)
+        .toFile(dest);
+    })
+}
+
+
+
 function createThumbnail(filename){
+  applySmartCrop('uploads/' + filename, 'uploads/cropped/' + filename, 200, 200);
+
   console.log('Create thumb: uploads/' + filename);
-  sharp('uploads/' + filename).resize(200).toFile('uploads/thumbnails/' + filename, (err, resizeImage) => {
+  sharp('uploads/cropped/' + filename).resize(200).toFile('uploads/thumbnails/' + filename, (err, resizeImage) => {
     if (err) {
       console.log(err);
     } else {
