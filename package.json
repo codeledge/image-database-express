@@ -44,6 +44,7 @@
     "fbgraph": "^1.4.4",
     "fs": "0.0.1-security",
     "googleapis": "^52.1.0",
+    "greenlock-express": "^4.0.3",
     "instagram-node": "^0.5.8",
     "jquery": "^3.5.1",
     "jquery-ui": "^1.12.1",
