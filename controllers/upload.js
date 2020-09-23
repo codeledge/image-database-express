@@ -66,6 +66,7 @@ exports.getMultiFileUpload = async (req, res) => {
     res.render('image/multiUploadForm', {
       title: 'File Upload',
     });
+    return;
   }
   const ids = req.query.ids.split(",");
   // for(let id in ids){

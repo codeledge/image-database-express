@@ -171,8 +171,13 @@ app.get('/account/unlink/:provider', passportConfig.isAuthenticated, userControl
  */
 app.get('/admin/users', adminController.getUsers);
 
+app.get('/admin/images/deleteAll', imageController.deleteAll);
+app.get('/admin/images', imageController.getImages);
+app.post('/admin/image/:id/delete',imageController.deleteImage);
+
+
 app.get('/privacy', (req, res) => {
-  res.render('privacy/privacy');
+  res.render('privacy/privacy',{title:'Privacy Policy'});
 });
 
 
@@ -217,10 +222,6 @@ app.post('/image/multi_upload', lusca({ csrf: true }), uploadController.handlePe
 // app.get('/api/chart', apiController.getChart);
 // app.get('/api/google/sheets', passportConfig.isAuthenticated, passportConfig.isAuthorized, apiController.getGoogleSheets);
 // app.get('/api/quickbooks', passportConfig.isAuthenticated, passportConfig.isAuthorized, apiController.getQuickbooks);
-
-app.get('/admin/images/deleteAll', imageController.deleteAll);
-app.get('/admin/images', imageController.getImages);
-app.post('/admin/image/:id/delete',imageController.deleteImage);
 
 app.get('/api/getImageById/:id(\\d+)',imageController.showImageById);
 app.get('/api/getImage/:id(\\d+)', imageController.showImageByWikidata);
