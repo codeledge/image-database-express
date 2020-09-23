@@ -14,6 +14,12 @@ cd image-database-express
 npm install
 nodemon app.js`
 ```
+
+maybe you need to run
+```
+npm rebuild node-sass
+```
+
 #Database
 .env.example has mongodb credentionals
 
