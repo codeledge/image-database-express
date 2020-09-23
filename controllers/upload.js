@@ -152,7 +152,8 @@ exports.handleMultiUrlUpload = async (req, res, next) => {
             internalFileName: file,
             uploadSite: req.hostname,
             // originalFilename: sourceUrl
-            viewCount: 0
+            viewCount: 0,
+            createdBy: req.user,
           };
           imageDetails.mimetype = 'image/jpeg';
           var image = new Image(imageDetails);
@@ -235,7 +236,8 @@ exports.postFileUpload = async (req, res, next) => {
     sourceUrl : req.body.sourceUrl,
     uploadSite: req.hostname,
     // wikidataType: label,
-    viewCount: 0
+    viewCount: 0,
+    createdBy: req.user,
   };
   if (req.file) {
     imageDetails.mimetype = req.file.mimetype;

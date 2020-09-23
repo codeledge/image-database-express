@@ -7,7 +7,10 @@ const fs = require('fs');
 const path = require('path');
 
 exports.getImages = (req, res) => {
-  ImageModel.find((err, docs) => {
+  ImageModel
+    .find()
+    .populate('createdBy')
+    .exec((err, docs) => {
     res.render('image/list', { images: docs });
   });
 };

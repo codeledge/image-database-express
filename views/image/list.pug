@@ -13,6 +13,9 @@ block content
             th Type
             th Source
             th Created
+            if user && user.role === 'admin'
+                th Uploaded By
+                th Action
 
         for image in images
             tr
@@ -32,6 +35,11 @@ block content
                         span
                 td=moment(image.createdAt).format('DD.MM.YYYY HH:mm')
                 if user && user.role === 'admin'
+                    if image.createdBy
+                        - console.log(image)
+                        td=image.createdBy.email
+                    else
+                        td
                     td
                         form(method='POST', action=`/admin/image/${image.id}/delete`)
                             input(type='hidden', name='_csrf', value=_csrf)
