@@ -21,8 +21,12 @@ exports.deleteImage = (req, res) => {
         req.flash('errors', { msg: 'Entry couldn\'t be deleted.' });
       }else{
         req.flash('success', { msg: 'Entry has been deleted.' });
-        fs.unlinkSync('uploads/' + id);
-        fs.unlinkSync('uploads/thumbnails/' + id);
+        try {
+          fs.unlinkSync('uploads/' + id);
+          fs.unlinkSync('uploads/thumbnails/' + id);
+        }catch (e) {
+          req.flash('errors', { msg: 'Some images (Id:'+id+') couldn\'t be deleted' });
+        }
       }
       res.redirect('/admin/images');
     }

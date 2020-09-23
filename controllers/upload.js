@@ -8,6 +8,7 @@ const request = require('request');
 const crypto = require('crypto');
 const sharp = require('sharp');
 const smartcrop = require('smartcrop-sharp');
+const FileType = require('file-type');
 
 const {
   simplify, parse, isEntityId, isPropertyId, getNumericId
@@ -29,6 +30,17 @@ const download = async (url, path) => {
         .on('close', resolve);
     })
   );
+
+  const fileType = await FileType.fromFile(path);
+  console.log(fileType);
+
+  if(!fileType){
+    throw 'no image';
+  }
+  if( fileType.mime.substr(0,5) !== 'image'){
+    throw 'no image';
+  }
+
 };
 
 function applySmartCrop(src, dest, width, height) {
@@ -122,6 +134,7 @@ exports.handleMultiUrlUpload = async (req, res, next) => {
   if(urls === undefined){
     req.flash('errors', {msg: 'Nothing.'});
     res.redirect(req.header('Referer') || '/');
+    return;
   }
   const wikidataInfo = await getItem(Object.keys(urls), 'en');
   let uploadedCount = 0;
@@ -153,12 +166,21 @@ exports.handleMultiUrlUpload = async (req, res, next) => {
       }
 
     } catch (err) {
+
+      //Try to delete the entry.
+      try {
+        await Image.remove({id: image.id});
+      }catch (e) {
+        console.log(e);
+      }
       req.flash('errors', {msg: 'URL invalid.'});
       res.redirect(req.header('Referer') || '/');
+      return;
     }
   }
   req.flash('success', { msg: `${uploadedCount} files uploaded.` });
   res.redirect(req.header('Referer') || '/');
+  return;
 
 };
 
@@ -189,6 +211,11 @@ exports.handleSourceUrl = async (req, res, next) => {
     next();
   }
 };
+
+function errorOnlyImages(){
+  req.flash('errors', { msg: 'You can only upload images.' });
+  res.redirect('/api/upload');
+}
 
 exports.postFileUpload = async (req, res, next) => {
   const wikidataId = req.body.wikidataEntityId;

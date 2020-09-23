@@ -42,6 +42,7 @@
     "express-session": "^1.17.1",
     "express-status-monitor": "^1.3.3",
     "fbgraph": "^1.4.4",
+    "file-type": "^15.0.1",
     "fs": "0.0.1-security",
     "googleapis": "^52.1.0",
     "greenlock-express": "^4.0.3",
