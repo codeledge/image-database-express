@@ -171,6 +171,11 @@ app.get('/account/unlink/:provider', passportConfig.isAuthenticated, userControl
  */
 app.get('/admin/users', adminController.getUsers);
 
+app.get('/privacy', (req, res) => {
+  res.render('privacy/privacy');
+});
+
+
 /**
  * API examples routes.
  */
