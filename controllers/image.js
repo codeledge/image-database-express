@@ -40,28 +40,30 @@ exports.deleteImage = (req, res) => {
 Clears the database,
 TODO disable
  */
-// exports.deleteAll = (req, res) => {
-//   // if (req.body.deleteAll) {
-//
-//     ImageModel.deleteMany({}, () => {
-//       req.flash('success', { msg: 'All entries deleted.' });
-//
-//       // const directory = 'uploads';
-//       //
-//       // fs.readdir(directory, (err, files) => {
-//       //   if (err) throw err;
-//       //
-//       //   for (const file of files) {
-//       //     fs.unlink(path.join(directory, file), err => {
-//       //       if (err) throw err;
-//       //     });
-//       //   }
-//       // });
-//
-//       res.redirect('/admin/images');
-//     });
-//   // }
-// };
+exports.deleteAll = (req, res) => {
+
+  res.redirect('/admin/images');
+  if (false) {
+
+    ImageModel.deleteMany({}, () => {
+      req.flash('success', { msg: 'All entries deleted.' });
+
+      // const directory = 'uploads';
+      //
+      // fs.readdir(directory, (err, files) => {
+      //   if (err) throw err;
+      //
+      //   for (const file of files) {
+      //     fs.unlink(path.join(directory, file), err => {
+      //       if (err) throw err;
+      //     });
+      //   }
+      // });
+
+      res.redirect('/admin/images');
+    });
+  }
+};
 
 exports.showImageByWikidata = async (req, res) => {
   const { id } = req.params;
