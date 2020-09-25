@@ -11,13 +11,16 @@
         li.nav-item(class=(title === 'Home') ? 'active' : undefined)
           a.nav-link(href='/') Home
         li.nav-item(class=(title === 'Functions') ? 'active' : undefined)
-          a.nav-link(href='/api') Functions
+          a.nav-link(href='/image/choose-upload') Functions
         //li.nav-item(class=(title === 'Contact') ? 'active' : undefined)
         //  a.nav-link(href='/contact') Contact
         //li.nav-item(class=(title === 'Status') ? 'active' : undefined)
         //  a.nav-link(href='/status') Status
         li.nav-item(class=(title === 'Images') ? 'active' : undefined)
           a.nav-link(href='/admin/images') Images
+        if user && user.role === 'admin'
+          li.nav-item(class=(title === 'User List') ? 'active' : undefined)
+            a.nav-link(href='/admin/users') User List
       ul.nav.navbar-nav.ml-auto
         if !user
           li.nav-item(class=(title === 'Login') ? 'active' : undefined)

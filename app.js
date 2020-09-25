@@ -104,7 +104,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 app.use((req, res, next) => {
-  if (req.path === '/api/upload') {
+  if (req.path === '/image/single_upload') {
     // Multer multipart/form-data handling needs to occur before the Lusca CSRF check.
     next();
   } else {
@@ -184,7 +184,7 @@ app.get('/privacy', (req, res) => {
 /**
  * API examples routes.
  */
-app.get('/api', apiController.getApi);
+app.get('/image/choose-upload', uploadController.getFunctions);
 // app.get('/api/lastfm', apiController.getLastfm);
 // app.get('/api/nyt', apiController.getNewYorkTimes);
 // app.get('/api/steam', passportConfig.isAuthenticated, passportConfig.isAuthorized, apiController.getSteam);
@@ -207,8 +207,8 @@ app.get('/api', apiController.getApi);
 // app.get('/api/paypal/success', apiController.getPayPalSuccess);
 // app.get('/api/paypal/cancel', apiController.getPayPalCancel);
 // app.get('/api/lob', apiController.getLob);
-app.get('/api/upload', lusca({ csrf: true }), uploadController.getFileUpload);
-app.post('/api/upload', upload.single('myFile'), lusca({ csrf: true }), uploadController.handleSourceUrl, uploadController.postFileUpload);
+app.get('/image/single_upload', lusca({ csrf: true }), uploadController.getFileUpload);
+app.post('/image/single_upload', upload.single('myFile'), lusca({ csrf: true }), uploadController.handleSourceUrl, uploadController.postFileUpload);
 
 
 app.get('/image/multi_upload', lusca({ csrf: true }), uploadController.getMultiFileUpload);

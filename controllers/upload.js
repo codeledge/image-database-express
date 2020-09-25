@@ -18,6 +18,17 @@ const getRelatives = require('./wikidata/getRelatives');
 
 const Image = require('../models/Image');
 
+
+/**
+ * GET /api
+ * List of API examples.
+ */
+exports.getFunctions = (req, res) => {
+  res.render('image/functions', {
+    title: 'Choose an option'
+  });
+};
+
 function getRandomFilename() {
   return crypto.randomBytes(20).toString('hex');
 }
@@ -74,7 +85,7 @@ exports.getMultiFileUpload = async (req, res) => {
 
   if (!req.query.ids) {
     // req.flash('errors', { msg: 'Parameter ids is missing' });
-    // res.redirect('/api/upload');
+    // res.redirect('/image/single_upload');
     res.render('image/multiUploadForm', {
       title: 'File Upload',
     });
@@ -84,7 +95,7 @@ exports.getMultiFileUpload = async (req, res) => {
   // for(let id in ids){
   //   if (!isEntityId(id)) {
   //     req.flash('errors', { msg: 'Some ids are invalid.' });
-  //     res.redirect('/api/upload');
+  //     res.redirect('/image/single_upload');
   //   }
   // }
 
@@ -186,7 +197,7 @@ exports.handleMultiUrlUpload = async (req, res, next) => {
 };
 
 exports.getFileUpload = (req, res) => {
-  res.render('api/upload', {
+  res.render('image/upload', {
     title: 'File Upload',
     // query: req.query
   });
@@ -202,11 +213,11 @@ exports.handleSourceUrl = async (req, res, next) => {
         next();
       } catch (err){
         req.flash('errors', { msg: 'URL invalid.' });
-        res.redirect('/api/upload');
+        res.redirect('/image/single_upload');
       }
     } else {
       req.flash('errors', { msg: 'No File is given.' });
-      res.redirect('/api/upload');
+      res.redirect('/image/single_upload');
     }
   } else {
     next();
@@ -215,14 +226,14 @@ exports.handleSourceUrl = async (req, res, next) => {
 
 function errorOnlyImages(){
   req.flash('errors', { msg: 'You can only upload images.' });
-  res.redirect('/api/upload');
+  res.redirect('/image/single_upload');
 }
 
 exports.postFileUpload = async (req, res, next) => {
   const wikidataId = req.body.wikidataEntityId;
   if (!isEntityId(wikidataId)) {
     req.flash('errors', { msg: 'The Entity ID ' + wikidataId + ' is invalid.' });
-    res.redirect('/api/upload');
+    res.redirect('/image/single_upload');
   }
   const wikidataInfo = await getItem([wikidataId], 'en');
   const label = wdk.simplify.labels(wikidataInfo[wikidataId].labels).en;
@@ -261,5 +272,5 @@ exports.postFileUpload = async (req, res, next) => {
 
   const wikidataLink = wdk.getSitelinkUrl({ site: 'wikidata', title: wikidataId });
   req.flash('success', { msg: `File was uploaded successfully. Photo of ${label} was saved and entered into the Database.` });
-  res.redirect('/api/upload');
+  res.redirect('/image/single_upload');
 };
