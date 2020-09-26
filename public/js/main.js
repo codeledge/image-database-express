@@ -21,6 +21,7 @@ $(document).ready(() => {
         },
         success(data) {
           // console.log(data);
+          $('#wikidataEntity_id').val('');//Reset ID field
           data = data.search;
           response(data);
         }
