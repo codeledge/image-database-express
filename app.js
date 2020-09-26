@@ -230,8 +230,8 @@ app.get('/api/image/info/:id(\\d+)', imageController.imageInfo);
 const v1ImageController = require('./controllers/api/v1image');
 
 app.get('/api/v1/image/:type/id/:id(\\d+)', v1ImageController.showImageById);
-app.get('/api/v1/image/:type/wikidata/:id(\\d+)' , v1ImageController.showImageByWikidata);
 app.get('/api/v1/image/info/wikidata/:id(\\d+)'  , v1ImageController.imageInfo);
+app.get('/api/v1/image/:type/wikidata/:id(\\d+)' , v1ImageController.showImageByWikidata);
 
 // app.route('/images')
 //   .get(imageController.getBooks)

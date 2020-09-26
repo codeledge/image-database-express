@@ -6,17 +6,19 @@ block content
   p Here you can upload pictures of Wikidata items, usually people. All images will be cropped using smart-crop to a resolution of 200 x 200 pixels. So it's best if you upload square photos.
   hr
 
-  h3 Request an image
+  h3 API version 1: Request an image
   div
     span Please use a valid Wikidata item id, without the Q. The returned image will be thumbnail with dimensions 200 x 200 pixels.
     ul
       li
-        a(href='/api/image/info/4115189') /api/image/info/$ID
-        small(style='margin-left:10px') Get Json info about a file
+        a(href='/api/v1/image/info/wikidata/4115189') /api/v1/image/info/wikidata/$ID
+        small(style='margin-left:10px') Get Json info about a file, $ID wikidata entity ID
       li
-        a(href='/api/getImage/4115189') /api/getImage/$ID
-        small(style='margin-left:10px') Get an image (return 404 on error)
-
+        a(href='/api/v1/image/thumbnail/wikidata/4115189') /api/v1/image/thumbnail/wikidata/4115189
+        small(style='margin-left:10px') Get an image using smartcrop (returns 404 on error)
+      li
+        a(href='/api/v1/image/facecrop/wikidata/4115189') /api/v1/image/facecrop/wikidata/4115189
+        small(style='margin-left:10px') Get an image using facecrop (returns 404 on error)
   //.row
   //  .col-md-6
   //    h2 Heading
