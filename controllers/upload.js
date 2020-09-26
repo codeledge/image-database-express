@@ -201,7 +201,7 @@ exports.handleMultiUrlUpload = async (req, res, next) => {
 exports.getFileUpload = (req, res) => {
   res.render('image/upload', {
     title: 'File Upload',
-    // query: req.query
+    query: req.query
   });
 };
 

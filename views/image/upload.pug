@@ -26,10 +26,10 @@ block content
             input(type='text', name='name')
           label.col-form-label.font-weight-bold Wikidata ID
           .col-md-6
-            input(type='text', name='wikidataEntity', class='wikidata-searchbox', required)
+            input(type='text', name='wikidataEntity', class='wikidata-searchbox', value=query.qLabel, required)
           .col-md-6
-            input(type='hidden', name='wikidataEntityId' id='wikidataEntity_id')
-          label.col-form-label.font-weight-bold File Input
+            input(type='text', name='wikidataEntityId' id='wikidataEntity_id', value=query.qId, required, readonly)
+          label.col-form-label.font-weight-bold File Input (optional)
           .col-md-6
             input(type='file', name='myFile', accept='image/*')
           label.col-form-label.font-weight-bold File URL
