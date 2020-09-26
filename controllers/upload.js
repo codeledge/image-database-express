@@ -9,6 +9,7 @@ const crypto = require('crypto');
 const sharp = require('sharp');
 const smartcrop = require('smartcrop-sharp');
 const FileType = require('file-type');
+const facecrop = require('opencv-facecrop');
 
 const {
   simplify, parse, isEntityId, isPropertyId, getNumericId
@@ -67,8 +68,9 @@ function applySmartCrop(src, dest, width, height) {
 
 
 
-function createThumbnail(filename){
-  applySmartCrop('uploads/' + filename, 'uploads/thumbnails/' + filename, 200, 200);
+async function createThumbnail(filename){
+  //applySmartCrop('uploads/' + filename, 'uploads/thumbnails/' + filename, 200, 200);
+  await facecrop(`./uploads/${filename}`, `./uploads/thumbnails/${filename}`,"image/jpeg", 0.5);
 
   // console.log('Create thumb: uploads/' + filename);
   // sharp('uploads/cropped/' + filename).resize(200).toFile('uploads/thumbnails/' + filename, (err, resizeImage) => {
