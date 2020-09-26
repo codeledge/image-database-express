@@ -20,7 +20,7 @@ const expressStatusMonitor = require('express-status-monitor');
 const sass = require('node-sass-middleware');
 const multer = require('multer');
 
-const upload = multer({ dest: path.join(__dirname, 'uploads') });
+const upload = multer({ dest: path.join(__dirname, 'uploads/original') });
 
 // var storage = multer.diskStorage({
 //   destination: function (req, file, cb) {
@@ -226,6 +226,12 @@ app.post('/image/multi_upload', lusca({ csrf: true }), uploadController.handlePe
 app.get('/api/getImageById/:id(\\d+)',imageController.showImageById);
 app.get('/api/getImage/:id(\\d+)', imageController.showImageByWikidata);
 app.get('/api/image/info/:id(\\d+)', imageController.imageInfo);
+
+const v1ImageController = require('./controllers/api/v1image');
+
+app.get('/api/v1/image/:type/id/:id(\\d+)', v1ImageController.showImageById);
+app.get('/api/v1/image/:type/wikidata/:id(\\d+)' , v1ImageController.showImageByWikidata);
+app.get('/api/v1/image/info/wikidata/:id(\\d+)'  , v1ImageController.imageInfo);
 
 // app.route('/images')
 //   .get(imageController.getBooks)

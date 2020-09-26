@@ -7,7 +7,7 @@ block content
     table(style='width:100%')
         tr
             th Image
-            th Count
+            th Face
             th Wikidata Id
             th Wikidata Label
             th Type
@@ -21,7 +21,12 @@ block content
             tr
                 td
                     if image.wikidataEntity
-                        img(src='/api/getImageById/' + image.id, style='max-height:30px' )
+                        img(src='/api/v1/image/thumbnail/id/' + image.id, style='max-height:30px' )
+                    else
+                        span Image
+                td
+                    if image.wikidataEntity
+                        img(src='/api/v1/image/facecrop/id/' + image.id, style='max-height:30px' )
                     else
                         span Image
                 td=image.viewCount

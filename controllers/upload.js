@@ -68,12 +68,18 @@ function applySmartCrop(src, dest, width, height) {
 
 
 
-async function createThumbnail(filename){
-  //applySmartCrop('uploads/' + filename, 'uploads/thumbnails/' + filename, 200, 200);
-  await facecrop(`./uploads/${filename}`, `./uploads/thumbnails/${filename}`,"image/jpeg", 0.5);
+async function createThumbnail(filename,filetype='image/jpeg'){
 
+  try {
+    applySmartCrop('uploads/original/' + filename, 'uploads/thumbnail/' + filename, 200, 200);
+
+    await facecrop(`./uploads/original/${filename}`, `./uploads/facecrop/${filename}`,filetype, 0.9);
+  }catch (e) {
+    req.flash('errors', { msg: 'Facecrop failed.' });
+    // console.log(e);
+  }
   // console.log('Create thumb: uploads/' + filename);
-  // sharp('uploads/cropped/' + filename).resize(200).toFile('uploads/thumbnails/' + filename, (err, resizeImage) => {
+  // sharp('uploads/cropped/' + filename).resize(200).toFile('uploads/thumbnail/' + filename, (err, resizeImage) => {
   //   if (err) {
   //     console.log(err);
   //   } else {
@@ -210,7 +216,7 @@ exports.handleSourceUrl = async (req, res, next) => {
     if (req.body.sourceUrl) {
       try {
         const file = getRandomFilename();
-        await download(req.body.sourceUrl, "uploads/" + file);
+        await download(req.body.sourceUrl, "uploads/original/" + file);
         res.savedUrl = file;
         next();
       } catch (err){
@@ -233,6 +239,7 @@ function errorOnlyImages(){
 
 exports.postFileUpload = async (req, res, next) => {
   const wikidataId = req.body.wikidataEntityId;
+  // console.log(req.body);
   if (!isEntityId(wikidataId)) {
     req.flash('errors', { msg: 'The Entity ID ' + wikidataId + ' is invalid.' });
     res.redirect('/image/single_upload');
@@ -265,12 +272,12 @@ exports.postFileUpload = async (req, res, next) => {
 
   var savedImage = await image.save();
 
-  fs.rename('uploads/' + imageDetails.internalFileName, 'uploads/' +savedImage.id, function (err) {
+  fs.rename('uploads/original/' + imageDetails.internalFileName, 'uploads/original/' +savedImage.id, function (err) {
     if (err) throw err;
     console.log('Successfully renamed - AKA moved!')
   });
 
-  createThumbnail(savedImage.id);
+  createThumbnail(savedImage.id,imageDetails.mimetype);
 
   const wikidataLink = wdk.getSitelinkUrl({ site: 'wikidata', title: wikidataId });
   req.flash('success', { msg: `File was uploaded successfully. Photo of ${label} was saved and entered into the Database.` });

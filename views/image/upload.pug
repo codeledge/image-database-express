@@ -17,13 +17,10 @@ block content
   //h3 File Upload Form
   .row
     .col-md-6
-      p All files will be uploaded to "/uploads" directory and entered.
+      p All files will be uploaded to "/uploads" directory and entered. Please either Upload a file OR select the URL.
       form(role='form', enctype='multipart/form-data', method='POST')
         input(type='hidden', name='_csrf', value=_csrf)
         .form-group
-          label.col-form-label.font-weight-bold Name
-          .col-md-6
-            input(type='text', name='name')
           label.col-form-label.font-weight-bold Wikidata ID
           .col-md-6
             input(type='text', name='wikidataEntity', class='wikidata-searchbox', value=query.qLabel, required)
@@ -32,7 +29,13 @@ block content
           label.col-form-label.font-weight-bold File Input (optional)
           .col-md-6
             input(type='file', name='myFile', accept='image/*')
-          label.col-form-label.font-weight-bold File URL
+          label.col-form-label.font-weight-bold File URL (optional)
           .col-md-6
             input(type='text', name='sourceUrl')
+          label.col-form-label.font-weight-bold Comment (optional)
+          .col-md-6
+            input(type='text', name='comment')
+          label.col-form-label.font-weight-bold Recorded date (optional)
+          .col-md-6
+            input(type='date', name='recordedDate')
         button.btn.btn-primary(type='submit') Submit

@@ -1,14 +1,14 @@
-/**
- * GET /images
- * List all images.
- */
 const ImageModel = require('../models/Image');
 const fs = require('fs');
 const path = require('path');
 
+/**
+ * GET /images
+ * List all images.
+ */
 exports.getImages = (req, res) => {
   ImageModel
-    .find()
+    .find({uploadSite: req.hostname})
     .populate('createdBy')
     .exec((err, docs) => {
     res.render('image/list', { images: docs });
@@ -25,9 +25,11 @@ exports.deleteImage = (req, res) => {
       }else{
         req.flash('success', { msg: 'Entry has been deleted.' });
         try {
-          fs.unlinkSync('uploads/' + id);
-          fs.unlinkSync('uploads/thumbnails/' + id);
+          fs.unlinkSync('uploads/original/' + id);
+          fs.unlinkSync('uploads/thumbnail/' + id);
+          fs.unlinkSync('uploads/facecrop/' + id);
         }catch (e) {
+          console.log(e);
           req.flash('errors', { msg: 'Some images (Id:'+id+') couldn\'t be deleted' });
         }
       }
