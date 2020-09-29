@@ -1,6 +1,7 @@
 const ImageModel = require('../models/Image');
 const fs = require('fs');
 const path = require('path');
+const uploadController = require('./upload');
 
 /**
  * GET /images
@@ -16,8 +17,13 @@ exports.getImages = (req, res) => {
 };
 
 exports.deleteImage = (req, res) => {
+
+  if(!req.user || req.user.role !== 'admin'){
+    return;
+  }
+
   const id = req.params.id;
-  ImageModel.remove(
+  ImageModel.deleteOne(
     { id: id },
     (err) => {
       if(err){
@@ -27,7 +33,9 @@ exports.deleteImage = (req, res) => {
         try {
           fs.unlinkSync('uploads/original/' + id);
           fs.unlinkSync('uploads/thumbnail/' + id);
-          fs.unlinkSync('uploads/facecrop/' + id);
+          for(let factor = 1; factor <= 1.8; factor = factor + 0.1) {
+            fs.unlinkSync('uploads/facecrop/' + id+ '-' + factor.toFixed(1));
+          }
         }catch (e) {
           console.log(e);
           req.flash('errors', { msg: 'Some images (Id:'+id+') couldn\'t be deleted' });
@@ -47,7 +55,7 @@ exports.deleteAll = (req, res) => {
   res.redirect('/admin/images');
   if (false) {
 
-    ImageModel.deleteMany({}, () => {
+    ImageModel.deleteMany({uploadSite: req.hostname}, () => {
       req.flash('success', { msg: 'All entries deleted.' });
 
       // const directory = 'uploads';
