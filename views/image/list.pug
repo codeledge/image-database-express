@@ -9,6 +9,7 @@ block content
             th Image
             th head
             th Face
+            th View Count
             th Wikidata Id
             th Wikidata Label
             th Type
@@ -36,7 +37,9 @@ block content
                     else
                         span Image
                 td=image.viewCount
-                td=image.wikidataEntity
+                td
+                    a(target='_blank' href=`https://www.wikidata.org/wiki/Q${image.wikidataEntity}`)
+                        =image.wikidataEntity
                 td=image.wikidataLabel
                 td=image.mimetype
                 td
