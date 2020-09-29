@@ -144,6 +144,7 @@ exports.handlePersonSelect = async (req, res, next) => {
       return entry.item.value;
     });
     res.redirect('/image/multi_upload?ids='+ids.slice(0,50).join(","));
+    return;
   }
   next();
 
@@ -191,7 +192,7 @@ exports.handleMultiUrlUpload = async (req, res, next) => {
 
       //Try to delete the entry.
       try {
-        await Image.remove({id: image.id});
+        await Image.deleteOne({id: image.id});
       }catch (e) {
         console.log(e);
       }
