@@ -180,8 +180,8 @@ exports.handleMultiUrlUpload = async (req, res, next) => {
           var image = new Image(imageDetails);
           var savedImage = await image.save();
           var savedImageId = savedImage.id;
-          await download(sourceUrl, "uploads/" + savedImageId);
-          createThumbnail(savedImageId);
+          await download(sourceUrl, "uploads/original/" + savedImageId);
+          createThumbnail(savedImageId,imageDetails.mimetype);
           uploadedCount++;
         // });
         // next();
