@@ -27,14 +27,18 @@ exports.showImageByWikidata = async (req, res) => {
 
   await ImageModel.updateOne( {_id:image[0]._id} , {viewCount:(image[0].viewCount+1)} );
 
-  res.setHeader('content-type', image[0].mimetype);
-  res.sendFile(path.resolve('uploads/'+type+'/' + image[0].id));
+  let { factor } = req.query;
+  outputImage(res,image[0].id,type,factor,image[0].mimetype);
 };
 
 exports.showImageById  = async (req, res) => {
   const { id, type } = req.params;
   let { factor } = req.query;
+  outputImage(res,id,type,factor);
+};
 
+
+function outputImage(res,id,type,factor,mimeType = "image/jpeg"){
   let ext = '';
   if(type === 'facecrop'){
     if(!factor){
@@ -46,9 +50,10 @@ exports.showImageById  = async (req, res) => {
     }
     ext = (factor ? '-'+ parseFloat(factor).toFixed(1) : '');
   }
-  res.setHeader('content-type', "image/jpeg");
+  res.setHeader('content-type', mimeType);
   res.sendFile(path.resolve('uploads/'+type+'/' + id + ext));
-};
+
+}
 
 
 exports.imageInfo = async (req, res) => {
