@@ -66,7 +66,18 @@ function applySmartCrop(src, dest, width, height) {
     })
 }
 
-
+exports.reloadThumbnails=  async (req, res) => {
+  if(!req.user || req.user.role !== 'admin'){
+    return;
+  }
+  const image = await Image.find({ uploadSite: req.hostname });
+  for(let i=0;i<image.length;i++) {
+    console.log(image[i].id);
+    await createThumbnail(image[i].id, image[i].mimetype);
+  }
+  req.flash('success', { msg: 'All thumbnails will be reloaded' });
+  res.redirect('/admin/images');
+};
 
 async function createThumbnail(filename,filetype='image/jpeg'){
 
