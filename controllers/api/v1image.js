@@ -5,6 +5,7 @@
  */
 const ImageModel = require('../../models/Image');
 const path = require('path');
+const uploadController = require('../upload');
 
 exports.showImageByWikidata = async (req, res) => {
   const { id, type } = req.params;
@@ -53,6 +54,10 @@ exports.showImageById  = async (req, res) => {
 exports.imageInfo = async (req, res) => {
   const { id } = req.params;
   const image = await ImageModel.find({ wikidataEntity: id }, null, { sort: { name: 1 }, limit: 1 });
+  if(!image.length){
+    uploadController.uploadWikimediaFile(req,id);
+    // const image = await ImageModel.find({ wikidataEntity: id }, null, { sort: { name: 1 }, limit: 1 });
+  }
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.json({images:image});
 };

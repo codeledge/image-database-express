@@ -89,6 +89,35 @@ async function createThumbnail(filename,filetype='image/jpeg'){
   //   }
   // });
 }
+exports.uploadWikimediaFile = async (req, id) => {
+  const qid = "Q"+id;
+  const wikidataEntities = await getItem([qid], 'en');
+  // const label = wdk.simplify.labels(wikidataEntities[qid].labels).en;
+  const claims = wdk.simplify.claims(wikidataEntities[qid].claims);
+  const images = claims.P18;
+  if(!images.length){
+    return null;
+  }
+  const imageUrl = 'https://commons.wikimedia.org/wiki/Special:FilePath/'+ images[0];
+  let imageDetails = {
+    wikidataEntity: getNumericId(qid),
+    wikidataLabel: wdk.simplify.labels(wikidataEntities[qid].labels).en,
+    sourceUrl: imageUrl,
+    sourceName: "commons.wikimedia.org",
+    uploadSite: req.hostname,
+    originalFilename: images[0],
+    viewCount: 0,
+    // createdBy: req.user,
+    mimetype: 'image/jpeg'
+  };
+  var image = new Image(imageDetails);
+  var savedImage = await image.save();
+  var savedImageId = savedImage.id;
+  await download(imageUrl, "uploads/original/" + savedImageId);
+  await createThumbnail(savedImageId,imageDetails.mimetype);
+  return true;
+};
+
 
 exports.getMultiFileUpload = async (req, res) => {
   // res.send(req.params);
