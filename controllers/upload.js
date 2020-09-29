@@ -9,7 +9,7 @@ const crypto = require('crypto');
 const sharp = require('sharp');
 const smartcrop = require('smartcrop-sharp');
 const FileType = require('file-type');
-const facecrop = require('opencv-facecrop');
+const facecrop = require('./facecrop');
 
 const {
   simplify, parse, isEntityId, isPropertyId, getNumericId
@@ -74,6 +74,8 @@ async function createThumbnail(filename,filetype='image/jpeg'){
     applySmartCrop('uploads/original/' + filename, 'uploads/thumbnail/' + filename, 200, 200);
 
     await facecrop(`./uploads/original/${filename}`, `./uploads/facecrop/${filename}`,filetype, 0.9);
+    await facecrop(`./uploads/original/${filename}`, `./uploads/headcrop/${filename}`,filetype, 0.9, 70);
+
   }catch (e) {
     req.flash('errors', { msg: 'Facecrop failed.' });
     // console.log(e);
