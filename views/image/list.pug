@@ -27,12 +27,12 @@ block content
                         span Image
                 td
                     if image.wikidataEntity
-                        img(src='/api/v1/image/headcrop/id/' + image.id, style='max-height:50px' )
+                        img(src='/api/v1/image/facecrop/id/' + image.id, style='max-height:50px' )
                     else
                         span Image
                 td
                     if image.wikidataEntity
-                        img(src='/api/v1/image/facecrop/id/' + image.id, style='max-height:50px' )
+                        img(src='/api/v1/image/facecrop/id/' + image.id+ '?factor=1.4', style='max-height:50px' )
                     else
                         span Image
                 td=image.viewCount

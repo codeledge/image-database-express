@@ -32,8 +32,21 @@ exports.showImageByWikidata = async (req, res) => {
 
 exports.showImageById  = async (req, res) => {
   const { id, type } = req.params;
+  let { factor } = req.query;
+
+  let ext = '';
+  if(type === 'facecrop'){
+    if(!factor){
+      factor = 1;
+    }
+    factor = parseFloat(factor).toFixed(1);
+    if(factor < 1 || factor > 1.75 ){
+      res.json({error:true,errorMsg:'factor invalid'});
+    }
+    ext = (factor ? '-'+ parseFloat(factor).toFixed(1) : '');
+  }
   res.setHeader('content-type', "image/jpeg");
-  res.sendFile(path.resolve('uploads/'+type+'/' + id));
+  res.sendFile(path.resolve('uploads/'+type+'/' + id + ext));
 };
 
 

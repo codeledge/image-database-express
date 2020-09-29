@@ -36,77 +36,80 @@ module.exports = async (file, name = "output.jpg", type = "image/jpeg", quality 
     let point1, point2;
 
     for (let i = 0; i < faces.size(); ++i) {
-      if(i< (faces.size() -1 ) ){
-        continue;
-        //only use last image
+
+
+      for(let factor = 1; factor <= 1.8; factor = factor + 0.1){
+        if(i< (faces.size() -1 ) ){
+          continue;
+          //only use last image
+        }
+        point1 = new cv.Point(faces.get(i).x, faces.get(i).y);
+        point2 = new cv.Point(faces.get(i).x + faces.get(i).width, faces.get(i).y + faces.get(i).height);
+
+        let offset = Math.floor(faces.get(i).width * (factor - 1));//get offset pixels from factor, width=height
+
+        // console.log([point1,point2]);
+        //
+        // console.log("offset set to"+offset);
+
+        if(point1.x < offset){
+          offset = point1.x;
+          // console.log("offset adjusted to "+offset);
+        }
+
+        if(point1.y < offset){
+          offset = point1.y;
+          // console.log("offset adjusted to "+offset);
+        }
+
+        if(image.height < (point2.y + offset)){
+          offset = image.height - point2.y;
+          // console.log("offset2 adjusted to "+offset);
+        }
+
+        if(image.width < (point2.x + offset)){
+          offset = image.width - point2.x;
+          // console.log("offset2 adjusted to "+offset);
+        }
+
+        point1.x = point1.x - offset;
+        point1.y = point1.y - offset;
+
+        point2.x = point2.x + offset;
+        point2.y = point2.y + offset;
+
+        console.log([point1,point2]);
+
+        if (point1.x < 0 || point1.y < 0 || point2.x < 0 || point2.y < 0)
+          throw new Error('Error: Factor passed is too high/low.');
+
+        const canvas = createCanvas(point2.x - point1.x, point2.y - point1.y);
+
+        let rect = new cv.Rect(point1.x, point1.y, point2.x - point1.x, point2.y - point1.y);
+
+        console.log('Rendering output image...');
+        let dst = src.roi(rect);
+
+        console.log("Source File dimension: " + src.size().width + "x" + src.size().height);
+        console.log("Destination File dimension: " + dst.size().width + "x" + dst.size().height);
+
+        cv.imshow(canvas, dst);
+
+        let outputFilename = name.toString() + "-" + factor.toFixed(1);//factor.toString to trim trailing zeros
+
+        console.log(outputFilename);
+        // if (faces.size() > 1) {
+        //   if (outputFilename.charAt(outputFilename.length - 4) == '.')
+        //     outputFilename = outputFilename.substr(0, (outputFilename.length - 4)) + `-${i + 1}` + outputFilename.substr((outputFilename.length - 4), 4);
+        //   else
+        //     throw new Error('Error: File extension should be 3 characters only.');
+        // }
+
+        writeFileSync(outputFilename, canvas.toBuffer(type, { quality: quality }));
+        console.log(outputFilename + " created successfully.");
       }
-      point1 = new cv.Point(faces.get(i).x, faces.get(i).y);
-      point2 = new cv.Point(faces.get(i).x + faces.get(i).width, faces.get(i).y + faces.get(i).height);
-
-      let offset = Math.floor(faces.get(i).width * (factor - 1));//get offset pixels from factor, width=height
-
-      // console.log([point1,point2]);
-      //
-      // console.log("offset set to"+offset);
-
-      if(point1.x < offset){
-        offset = point1.x;
-        // console.log("offset adjusted to "+offset);
-      }
-
-      if(point1.y < offset){
-        offset = point1.y;
-        // console.log("offset adjusted to "+offset);
-      }
-
-      if(image.height < (point2.y + offset)){
-        offset = image.height - point2.y;
-        // console.log("offset2 adjusted to "+offset);
-      }
-
-      if(image.width < (point2.x + offset)){
-        offset = image.width - point2.x;
-        // console.log("offset2 adjusted to "+offset);
-      }
-
-      point1.x = point1.x - offset;
-      point1.y = point1.y - offset;
-
-      point2.x = point2.x + offset;
-      point2.y = point2.y + offset;
-
-      console.log([point1,point2]);
-
-      if (point1.x < 0 || point1.y < 0 || point2.x < 0 || point2.y < 0)
-        throw new Error('Error: Factor passed is too high/low.');
-
-      const canvas = createCanvas(point2.x - point1.x, point2.y - point1.y);
-
-      let rect = new cv.Rect(point1.x, point1.y, point2.x - point1.x, point2.y - point1.y);
-
-      console.log('Rendering output image...');
-      let dst = src.roi(rect);
-
-      console.log("Source File dimension: " + src.size().width + "x" + src.size().height);
-      console.log("Destination File dimension: " + dst.size().width + "x" + dst.size().height);
-
-      cv.imshow(canvas, dst);
-
-      let outputFilename = name.toString();
-
-      console.log(outputFilename);
-      // if (faces.size() > 1) {
-      //   if (outputFilename.charAt(outputFilename.length - 4) == '.')
-      //     outputFilename = outputFilename.substr(0, (outputFilename.length - 4)) + `-${i + 1}` + outputFilename.substr((outputFilename.length - 4), 4);
-      //   else
-      //     throw new Error('Error: File extension should be 3 characters only.');
-      // }
-
-      writeFileSync(outputFilename, canvas.toBuffer(type, { quality: quality }));
-      console.log(outputFilename + " created successfully.");
-
     }
-    return "Success";
+    return true;
   }
   catch (e) {
     console.error(e.message);
