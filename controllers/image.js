@@ -92,14 +92,14 @@ exports.showImageByWikidata = async (req, res) => {
   await ImageModel.updateOne( {_id:image[0]._id} , {viewCount:(image[0].viewCount+1)} );
 
   res.setHeader('content-type', image[0].mimetype);
-  res.sendFile(path.resolve('uploads/thumbnails/' + image[0].id));
+  res.sendFile(path.resolve('uploads/thumbnail/' + image[0].id));
   // res.json({ req: image });
   // console.log(image[0].internalFileName);
 };
 exports.showImageById  = async (req, res) => {
   const { id } = req.params;
   res.setHeader('content-type', "image/jpeg");
-  res.sendFile(path.resolve('uploads/thumbnails/' + id));
+  res.sendFile(path.resolve('uploads/thumbnail/' + id));
 };
 
 
