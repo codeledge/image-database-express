@@ -36,6 +36,9 @@ Image list: A list of all images, Users with role=admin can delete images, delet
 
 Currently anyone can upload photos.
 
+# License
+
+GNU General Public License v3.0
 
 #Author
 M. Schibel
