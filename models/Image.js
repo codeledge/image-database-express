@@ -11,6 +11,7 @@ const imageSchema = new mongoose.Schema({
   mimetype: String,
   license: String,
   sourceUrl: String,
+  sourceName: String,
   fileSize: Number,
   author: String,
   comment: String,
