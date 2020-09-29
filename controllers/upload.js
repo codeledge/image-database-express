@@ -74,7 +74,7 @@ async function createThumbnail(filename,filetype='image/jpeg'){
     applySmartCrop('uploads/original/' + filename, 'uploads/thumbnail/' + filename, 200, 200);
 
     await facecrop(`./uploads/original/${filename}`, `./uploads/facecrop/${filename}`,filetype, 0.9);
-    await facecrop(`./uploads/original/${filename}`, `./uploads/headcrop/${filename}`,filetype, 0.9, 70);
+    await facecrop(`./uploads/original/${filename}`, `./uploads/headcrop/${filename}`,filetype, 0.9, 1.4);
 
   }catch (e) {
     req.flash('errors', { msg: 'Facecrop failed.' });

@@ -22,17 +22,17 @@ block content
             tr
                 td
                     if image.wikidataEntity
-                        img(src='/api/v1/image/thumbnail/id/' + image.id, style='max-height:30px' )
+                        img(src='/api/v1/image/thumbnail/id/' + image.id, style='max-height:50px' )
                     else
                         span Image
                 td
                     if image.wikidataEntity
-                        img(src='/api/v1/image/headcrop/id/' + image.id, style='max-height:30px' )
+                        img(src='/api/v1/image/headcrop/id/' + image.id, style='max-height:50px' )
                     else
                         span Image
                 td
                     if image.wikidataEntity
-                        img(src='/api/v1/image/facecrop/id/' + image.id, style='max-height:30px' )
+                        img(src='/api/v1/image/facecrop/id/' + image.id, style='max-height:50px' )
                     else
                         span Image
                 td=image.viewCount
@@ -47,7 +47,6 @@ block content
                 td=moment(image.createdAt).format('DD.MM.YYYY HH:mm')
                 if user && user.role === 'admin'
                     if image.createdBy
-                        - console.log(image)
                         td=image.createdBy.email
                     else
                         td
