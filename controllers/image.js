@@ -16,6 +16,15 @@ exports.getImages = (req, res) => {
   });
 };
 
+function deleteFilesById(id){
+  fs.unlinkSync('uploads/original/' + id);
+  fs.unlinkSync('uploads/thumbnail/' + id);
+  for(let factor = 1; factor <= 1.8; factor = factor + 0.1) {
+    fs.unlinkSync('uploads/facecrop/' + id+ '-' + factor.toFixed(1));
+  }
+  return true;
+}
+
 exports.deleteImage = (req, res) => {
 
   if(!req.user || req.user.role !== 'admin'){
@@ -31,11 +40,7 @@ exports.deleteImage = (req, res) => {
       }else{
         req.flash('success', { msg: 'Entry has been deleted.' });
         try {
-          fs.unlinkSync('uploads/original/' + id);
-          fs.unlinkSync('uploads/thumbnail/' + id);
-          for(let factor = 1; factor <= 1.8; factor = factor + 0.1) {
-            fs.unlinkSync('uploads/facecrop/' + id+ '-' + factor.toFixed(1));
-          }
+          deleteFilesById(id);
         }catch (e) {
           console.log(e);
           req.flash('errors', { msg: 'Some images (Id:'+id+') couldn\'t be deleted' });
@@ -46,6 +51,37 @@ exports.deleteImage = (req, res) => {
   );
 };
 
+
+exports.deleteAllWikimediaImages = (req, res) => {
+
+  if(!req.user || req.user.role !== 'admin'){
+    req.flash('errors', { msg: 'No permission.' });
+    res.redirect('/admin/images');
+    return;
+  }
+
+  if (true) {
+    ImageModel.find({uploadSite: req.hostname,sourceName: "commons.wikimedia.org"}, (err, rows) => {
+
+      if(rows.length) {
+        ImageModel.deleteMany({uploadSite: req.hostname, sourceName: "commons.wikimedia.org"}, () => {
+          for (var row in rows) {
+            try {
+              deleteFilesById(rows[row].id);
+            } catch (e) {
+              console.log(e);
+              req.flash('errors', {msg: 'Some images (Id:' + rows[row].id + ') couldn\'t be deleted'});
+            }
+          }
+          req.flash('success', {msg: 'All entries from Wikimedia deleted.'});
+          res.redirect('/admin/images');
+        });
+      }
+      req.flash('success', {msg: 'No entries found.'});
+      res.redirect('/admin/images');
+    });
+  }
+};
 /*
 Clears the database,
 TODO disable

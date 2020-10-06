@@ -171,6 +171,7 @@ app.get('/account/unlink/:provider', passportConfig.isAuthenticated, userControl
  */
 app.get('/admin/users', adminController.getUsers);
 
+app.get('/admin/images/deleteAllWikimediaImages', imageController.deleteAllWikimediaImages);
 app.get('/admin/images/deleteAll', imageController.deleteAll);
 app.get('/admin/images', imageController.getImages);
 app.get('/admin/images/reloadThumbnails', uploadController.reloadThumbnails);
