@@ -84,8 +84,7 @@ async function createThumbnail(filename,filetype='image/jpeg'){
   try {
     applySmartCrop('uploads/original/' + filename, 'uploads/thumbnail/' + filename, 200, 200);
 
-    // await facecrop(`./uploads/original/${filename}`, `./uploads/facecrop/${filename}`,filetype, 0.9);
-    await facecrop(`./uploads/original/${filename}`, `./uploads/facecrop/${filename}`,filetype, 0.9, 1.7);
+    await facecrop(`./uploads/original/${filename}`, `./uploads/facecrop/${filename}`,filetype, 0.9, 1.7, './controllers/resources/haarcascade_frontalface_alt_tree.xml');
 
   }catch (e) {
     req.flash('errors', { msg: 'Facecrop failed.' });
