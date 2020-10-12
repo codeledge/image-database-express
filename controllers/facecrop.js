@@ -37,12 +37,11 @@ module.exports = async (file, name = "output.jpg", type = "image/jpeg", quality 
 
     for (let i = 0; i < faces.size(); ++i) {
 
-
+      if(i< (faces.size() -1 ) ){
+        continue;
+        //only use last image
+      }
       for(let factor = 1; factor <= 1.8; factor = factor + 0.1){
-        if(i< (faces.size() -1 ) ){
-          continue;
-          //only use last image
-        }
         point1 = new cv.Point(faces.get(i).x, faces.get(i).y);
         point2 = new cv.Point(faces.get(i).x + faces.get(i).width, faces.get(i).y + faces.get(i).height);
 
