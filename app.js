@@ -176,7 +176,7 @@ app.get('/admin/images/deleteAll', imageController.deleteAll);
 app.get('/admin/images', imageController.getImages);
 app.get('/admin/images/reloadThumbnails', uploadController.reloadThumbnails);
 app.post('/admin/image/:id/delete',imageController.deleteImage);
-
+// app.get('/admin/images/setHost', adminController.setNewHost);
 
 app.get('/privacy', (req, res) => {
   res.render('privacy/privacy',{title:'Privacy Policy'});
