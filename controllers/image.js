@@ -12,7 +12,7 @@ exports.getImages = (req, res) => {
     .find({uploadSite: req.hostname})
     .populate('createdBy')
     .exec((err, docs) => {
-    res.render('image/list', { images: docs });
+    res.render('image/list', { images: docs, imageHeight: 40 });
   });
 };
 
@@ -88,8 +88,7 @@ TODO disable
  */
 exports.deleteAll = (req, res) => {
 
-  res.redirect('/admin/images');
-  if (false) {
+  if (true) {
 
     ImageModel.deleteMany({uploadSite: req.hostname}, () => {
       req.flash('success', { msg: 'All entries deleted.' });
