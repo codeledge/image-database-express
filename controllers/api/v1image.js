@@ -58,7 +58,7 @@ function outputImage(res,id,type,factor,mimeType = "image/jpeg"){
 
 exports.imageInfo = async (req, res) => {
   const { id } = req.params;
-  const image = await ImageModel.find({ wikidataEntity: id }, null, { sort: { name: 1 }, limit: 1 });
+  const image = await ImageModel.find({ wikidataEntity: id,uploadSite: req.hostname }, null, { sort: { name: 1 }, limit: 1 });
   if(!image.length){
     // uploadController.uploadWikimediaFile(req,id);
     // const image = await ImageModel.find({ wikidataEntity: id }, null, { sort: { name: 1 }, limit: 1 });
