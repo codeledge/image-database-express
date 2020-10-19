@@ -5,6 +5,7 @@
  */
 const ImageModel = require('../../models/Image');
 const path = require('path');
+const fs = require('fs');
 const uploadController = require('../upload');
 
 exports.showImageByWikidata = async (req, res) => {
@@ -51,8 +52,12 @@ function outputImage(res,id,type,factor,mimeType = "image/jpeg"){
     ext = (factor ? '-'+ parseFloat(factor).toFixed(1) : '');
   }
   res.setHeader('content-type', mimeType);
-  res.sendFile(path.resolve('uploads/'+type+'/' + id + ext));
-
+  const reqFile = 'uploads/'+type+'/' + id + ext;
+  if (fs.existsSync(reqFile)) {
+    res.sendFile(path.resolve(reqFile));
+  }else {
+    res.sendFile(path.resolve('uploads/thumbnail/' + id));
+  }
 }
 
 
