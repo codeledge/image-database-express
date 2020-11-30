@@ -296,6 +296,7 @@ exports.postFileUpload = async (req, res, next) => {
     wikidataEntity: getNumericId(wikidataId),
     wikidataLabel: label,
     sourceUrl : req.body.sourceUrl,
+    recordedDate: req.body.recordedDate,
     uploadSite: req.hostname,
     // wikidataType: label,
     viewCount: 0,
