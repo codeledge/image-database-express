@@ -88,7 +88,7 @@ TODO disable
  */
 exports.deleteAll = (req, res) => {
 
-  if (true) {
+  if (false) {
 
     ImageModel.deleteMany({uploadSite: req.hostname}, () => {
       req.flash('success', { msg: 'All entries deleted.' });
