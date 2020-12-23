@@ -186,7 +186,7 @@ app.get('/privacy', (req, res) => {
 /**
  * API examples routes.
  */
-app.get('/image/choose-upload', uploadController.getFunctions);
+app.get('/image/choose-upload', uploadController.loginFirst, uploadController.getFunctions);
 // app.get('/api/lastfm', apiController.getLastfm);
 // app.get('/api/nyt', apiController.getNewYorkTimes);
 // app.get('/api/steam', passportConfig.isAuthenticated, passportConfig.isAuthorized, apiController.getSteam);
@@ -209,11 +209,11 @@ app.get('/image/choose-upload', uploadController.getFunctions);
 // app.get('/api/paypal/success', apiController.getPayPalSuccess);
 // app.get('/api/paypal/cancel', apiController.getPayPalCancel);
 // app.get('/api/lob', apiController.getLob);
-app.get('/image/single_upload', lusca({ csrf: true }), uploadController.getFileUpload);
+app.get('/image/single_upload', lusca({ csrf: true }), uploadController.loginFirst, uploadController.getFileUpload);
 app.post('/image/single_upload', upload.single('myFile'), lusca({ csrf: true }), uploadController.handleSourceUrl, uploadController.postFileUpload);
 
 
-app.get('/image/multi_upload', lusca({ csrf: true }), uploadController.getMultiFileUpload);
+app.get('/image/multi_upload', lusca({ csrf: true }), uploadController.loginFirst, uploadController.getMultiFileUpload);
 app.post('/image/multi_upload', lusca({ csrf: true }), uploadController.handlePersonSelect, uploadController.handleMultiUrlUpload);
 
 // app.get('/api/pinterest', passportConfig.isAuthenticated, passportConfig.isAuthorized, apiController.getPinterest);

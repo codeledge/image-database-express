@@ -246,11 +246,19 @@ exports.handleMultiUrlUpload = async (req, res, next) => {
 
 };
 
+exports.loginFirst = (req, res, next) => {
+  if(!req.user) {
+    req.flash('errors', {msg: 'Please login before uploading images.'});
+    // res.redirect('/login');
+  }
+  next();
+};
+
 exports.getFileUpload = (req, res) => {
   res.render('image/upload', {
-    title: 'File Upload',
-    query: req.query
-  });
+  title: 'File Upload',
+  query: req.query
+});
 };
 
 exports.handleSourceUrl = async (req, res, next) => {
