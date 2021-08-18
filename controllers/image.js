@@ -16,6 +16,20 @@ exports.getImages = (req, res) => {
   });
 };
 
+/**
+ * GET /images/preview
+ * List all images.
+ */
+ exports.getImagesPreview = (req, res) => {
+  ImageModel
+    .find({})//uploadSite: req.hostname
+    .populate('createdBy')
+    .limit(10)
+    .exec((err, docs) => {
+    res.render('image/preview', { images: docs, imageHeight: 40 });
+  });
+};
+
 function deleteFilesById(id){
   fs.unlinkSync('uploads/original/' + id);
   fs.unlinkSync('uploads/thumbnail/' + id);
