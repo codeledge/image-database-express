@@ -153,8 +153,8 @@ app.get('/forgot', userController.getForgot);
 app.post('/forgot', userController.postForgot);
 app.get('/reset/:token', userController.getReset);
 app.post('/reset/:token', userController.postReset);
-app.get('/signup', userController.getSignup);
-app.post('/signup', userController.postSignup);
+// app.get('/signup', userController.getSignup);
+// app.post('/signup', userController.postSignup);
 app.get('/contact', contactController.getContact);
 app.post('/contact', contactController.postContact);
 app.get('/account/verify', passportConfig.isAuthenticated, userController.getVerifyEmail);
@@ -174,6 +174,7 @@ app.get('/admin/users', adminController.getUsers);
 app.get('/admin/images/deleteAllWikimediaImages', imageController.deleteAllWikimediaImages);
 app.get('/admin/images/deleteAll', imageController.deleteAll);
 app.get('/admin/images', imageController.getImages);
+app.get('/admin/images/preview', imageController.getImagesPreview);
 app.get('/admin/images/reloadThumbnails', uploadController.reloadThumbnails);
 app.post('/admin/image/:id/delete',imageController.deleteImage);
 // app.get('/admin/images/setHost', adminController.setNewHost);
@@ -231,6 +232,8 @@ app.get('/api/image/info/:id(\\d+)', imageController.imageInfo);
 
 const v1ImageController = require('./controllers/api/v1image');
 
+
+app.get('/api/v1/image/removeBg/id/:id(\\d+)', v1ImageController.removeBgById);
 app.get('/api/v1/image/:type/id/:id(\\d+)', v1ImageController.showImageById);
 app.get('/api/v1/image/info/wikidata/:id(\\d+)'  , v1ImageController.imageInfo);
 app.get('/api/v1/image/:type/wikidata/:id(\\d+)' , v1ImageController.showImageByWikidata);
