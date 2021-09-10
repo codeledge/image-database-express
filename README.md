@@ -1,4 +1,4 @@
-## NOTICe: The development has moved to https://github.com/codeledge/image-database-next
+## NOTICE: The development has moved to https://github.com/codeledge/image-database-next
 
 
 
