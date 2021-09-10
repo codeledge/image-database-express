@@ -1,3 +1,7 @@
+## NOTICe: The development has moved to https://github.com/codeledge/image-database-next
+
+
+
 Image Database
 =======================
 
